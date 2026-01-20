@@ -1,0 +1,11 @@
+{
+  "type": "module",
+  "scripts": {
+    "start": "node main.js",
+    "test": "ava",
+    "retest": "ava --watch"
+  },
+  "devDependencies": {
+    "ava": "^6.4.1"
+  }
+}
