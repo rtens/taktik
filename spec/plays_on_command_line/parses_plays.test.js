@@ -1,5 +1,8 @@
 import test from 'ava'
 import { Move, parse, PlaceCapstone, PlaceFlat, PlaceWall } from '../../src/model/play.js'
+import Cli from '../../src/players/cli.js'
+import MockInterface from '../mock_interface.js'
+import Game from '../../src/model/game.js'
 
 test('place flat', t => {
   t.deepEqual(parse('a1'), PlaceFlat.at(0, 0))

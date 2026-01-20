@@ -20,6 +20,7 @@ test('draw', async t => {
 
   await runner.run()
 
+  t.true(inter.closed)
   t.like(inter.outputs.slice(-2), [
     "It's a draw",
     "1/2-1/2",

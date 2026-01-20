@@ -1,6 +1,6 @@
 import Board from './board.js'
 import { Stone } from './piece.js'
-import { Move, Place, PlaceFlat } from './play.js'
+import { PlaceFlat } from './play.js'
 import { Draw, FlatWin, Forfeit, RoadWin } from './result.js'
 
 export default class Game {
@@ -73,5 +73,12 @@ export default class Game {
       }
     }
     return counts
+  }
+
+  clone() {
+    const game = new Game()
+    game.board = this.board.clone()
+    game.plays = [...this.plays]
+    return game
   }
 }

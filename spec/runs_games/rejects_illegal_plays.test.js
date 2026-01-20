@@ -1,8 +1,33 @@
 import test from 'ava'
+import MockInterface from '../mock_interface.js'
+import MockPlayer from './mock_player.js'
+import Runner from '../../src/runner.js'
 import Game from '../../src/model/game.js'
 import Stack from '../../src/model/stack.js'
 import { Stone } from '../../src/model/piece.js'
 import { Move, parse, PlaceCapstone, PlaceFlat, PlaceWall } from '../../src/model/play.js'
+
+test('try again', async t => {
+  const inter = new MockInterface(t)
+  const runner = new Runner(inter)
+
+  runner.import = MockPlayer.playing([
+    'a1', 'a1'
+  ]).import()
+
+  inter.answer("Player 1:", "foo One")
+  inter.answer("Player 2:", "foo Two")
+  inter.answer("Who is white? (1, 2, [r]andom)", "1")
+  inter.answer("Board size: (3-8 [5])", "3")
+
+  await runner.run()
+
+  t.like(inter.outputs.slice(4), [
+    'Two plays a1',
+    'Illegal play: Square not empty',
+    'Two\'s turn'
+  ])
+})
 
 test('not a square', t => {
   const game = new Game(3)

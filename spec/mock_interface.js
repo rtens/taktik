@@ -20,4 +20,8 @@ export default class MockInterface {
     this.answers[prompt] ||= []
     this.answers[prompt].push(response)
   }
+
+  close() {
+    this.closed = true
+  }
 }

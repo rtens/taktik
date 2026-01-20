@@ -16,4 +16,8 @@ export default class Interface {
     process.stdout.write(prompt + ' ')
     return (await this.rl[Symbol.asyncIterator]().next()).value
   }
+
+  close() {
+    this.rl.close()
+  }
 }

@@ -1,6 +1,4 @@
 import Coords from './coords.js'
-import { Stone } from './piece.js'
-import { RoadWin } from './result.js'
 import Square from './square.js'
 import Stash from './stash.js'
 
@@ -10,17 +8,18 @@ export default class Board {
     this.size = size
     this.white = new Stash('white', stones[size], capstones[size])
     this.black = new Stash('black', stones[size], capstones[size])
-    this.init_squares()
+    this.squares = this.init_squares()
   }
 
   init_squares() {
-    this.squares = {}
+    const squares = {}
     for (let file = 0; file < this.size; file++) {
       for (let rank = 0; rank < this.size; rank++) {
         const coords = new Coords(file, rank)
-        this.squares[coords.name()] = new Square(coords)
+        squares[coords.name()] = new Square(coords)
       }
     }
+    return squares
   }
 
   square(coords) {
@@ -31,6 +30,16 @@ export default class Board {
 
   filled() {
     return !Object.values(this.squares).find(s => s.empty())
+  }
+
+  clone() {
+    const board = new Board(this.size)
+    board.white = this.white.clone()
+    board.black = this.black.clone()
+    board.squares = Object.entries(this.squares)
+      .reduce((acc, [c, s]) => ({ ...acc, [c]: s.clone() }), {})
+
+    return board
   }
 
   road() {
@@ -89,16 +98,6 @@ export default class Board {
     }
 
     return null
-  }
-
-  clone() {
-    const board = new Board(this.size)
-    board.white = this.white.clone()
-    board.black = this.black.clone()
-    board.squares = Object.entries(this.squares)
-      .reduce((acc, [c, s]) => ({ ...acc, [c]: s.clone() }), {})
-
-    return board
   }
 }
 

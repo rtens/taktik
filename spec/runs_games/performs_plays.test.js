@@ -60,7 +60,9 @@ test('applies plays', async t => {
   await runner.run()
 
   t.like(inter.outputs.slice(1), [
+    "One's turn",
     "One plays One's play",
+    "Two's turn",
     "Two plays Two's play"
   ])
 
@@ -83,8 +85,9 @@ test('white forfeits', async t => {
   runner.import = MockPlayer.playing([]).import()
   await runner.run()
 
+  t.true(inter.closed)
   t.like(inter.outputs.slice(-2), [
-    'Two forfeited',
+    'Two forfeits',
     '0-1'
   ])
 })
@@ -100,8 +103,9 @@ test('black forfeits', async t => {
   runner.import = MockPlayer.playing(['a1']).import()
   await runner.run()
 
+  t.true(inter.closed)
   t.like(inter.outputs.slice(-2), [
-    'One forfeited',
+    'One forfeits',
     '1-0'
   ])
 })

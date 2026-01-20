@@ -23,18 +23,23 @@ class Play {
 export function parse(ptn) {
   if (ptn.length == 2) {
     return new PlaceFlat(parse_coords(ptn))
+
   } else if (ptn.startsWith('S')) {
     return new PlaceWall(parse_coords(ptn.slice(1)))
+
   } else if (ptn.startsWith('C')) {
     return new PlaceCapstone(parse_coords(ptn.slice(1)))
+
   } else if (ptn.length == 3) {
     return new Move(parse_coords(ptn))
       .to(ptn.slice(2))
       .drop(1)
+
   } else if (ptn.length == 4) {
     return new Move(parse_coords(ptn.slice(1)))
       .to(ptn.slice(3))
       .drop(parseInt(ptn.slice(0, 1)))
+
   } else {
     const move = new Move(parse_coords(ptn.slice(1)))
       .to(ptn.slice(3, 4))
