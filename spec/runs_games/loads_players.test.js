@@ -1,6 +1,7 @@
 import test from 'ava'
 import MockInterface from '../mock_interface.js'
 import Runner from '../../src/runner.js'
+import MockPlayer from './mock_player.js'
 
 test('existing file', async t => {
   const inter = new MockInterface(t)
@@ -9,12 +10,14 @@ test('existing file', async t => {
   const imported = []
   runner.import = file => {
     imported.push(file)
-    return { default: class { } }
+    return {
+      default: MockPlayer
+    }
   }
 
   inter.answer("Player 1:", "foo")
   inter.answer("Player 2:", "bar")
-  runner.run()
+  await runner.run()
 
   t.like(imported, [
     './players/foo.js',
@@ -28,8 +31,9 @@ test('with arguments', async t => {
 
   const constructed = []
   runner.import = () => ({
-    default: class {
+    default: class extends MockPlayer {
       constructor(runner, ...args) {
+        super(runner, ...args)
         t.assert(runner instanceof Runner)
         constructed.push(args)
       }
@@ -38,7 +42,7 @@ test('with arguments', async t => {
 
   inter.answer("Player 1:", "foo one two")
   inter.answer("Player 2:", "bar tre")
-  runner.run()
+  await runner.run()
 
   t.like(constructed, [
     ['one', 'two'],

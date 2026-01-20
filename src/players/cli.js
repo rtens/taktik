@@ -13,11 +13,14 @@ export default class Cli extends Player {
   }
 
   async play(game) {
-    const input = await this.runner.interface.read('Your play:')
-    if (input) return parse(input)
+    let input = await this.runner.interface.read('Your play:')
 
-    this.print_board(game.board)
-    return this.play(game)
+    while (typeof input == 'string') {
+      if (input) return parse(input)
+
+      this.print_board(game.board)
+      input = await this.runner.interface.read('Your play:')
+    }
   }
 
   print_board(board) {

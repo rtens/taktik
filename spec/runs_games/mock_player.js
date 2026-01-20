@@ -21,9 +21,10 @@ export default class MockPlayer extends Player {
   }
 }
 
-MockPlayer.playing_ptn = plays =>
+MockPlayer.playing = plays =>
   class extends MockPlayer {
     play() {
-      return parse(plays.shift())
+      const play = plays.shift()
+      return play ? parse(play) : null
     }
   }

@@ -14,10 +14,9 @@ test('Empty board', async t => {
   const game = new Game(3)
 
   inter.answer('Your play:', '')
-  inter.answer('Your play:', 'a1')
   await cli.play(game)
 
-  await inter.expect(
+  t.like(inter.outputs, [
     '  ,-----------,' + '\n' +
     '3 |   |   |   |' + '\n' +
     '  |-----------|' + '\n' +
@@ -25,9 +24,8 @@ test('Empty board', async t => {
     '  |-----------|' + '\n' +
     '1 |   |   |   |' + '\n' +
     "  '-----------'" + '\n' +
-    '    a   b   c' + '\n')
-
-  t.pass()
+    '    a   b   c' + '\n'
+  ])
 })
 
 test.skip('5x5 board', async t => {

@@ -1,5 +1,5 @@
 import Game from './model/game.js'
-import { Draw, FlatWin, RoadWin } from './model/result.js'
+import { Draw, FlatWin, Forfeit, RoadWin } from './model/result.js'
 
 export default class Runner {
 
@@ -24,8 +24,13 @@ export default class Runner {
 
       const play = await player.play(game)
 
-      game.perform(play)
-      this.interface.print(`${player.name()} plays ${play.ptn()}`)
+      if (play) {
+        game.perform(play)
+        this.interface.print(`${player.name()} plays ${play.ptn()}`)
+
+      } else {
+        game.forfeit(game.turn())
+      }
     }
 
     const result = game.result()
@@ -35,6 +40,8 @@ export default class Runner {
       this.interface.print(`${players[result.color].name()} won by flat count`)
     } else if (result instanceof Draw) {
       this.interface.print("It's a draw")
+    } else if (result instanceof Forfeit) {
+      this.interface.print(`${players[result.color].name()} forfeited`)
     }
     this.interface.print(result.ptn())
   }

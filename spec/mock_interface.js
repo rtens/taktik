@@ -11,11 +11,13 @@ export default class MockInterface {
 
   read(prompt) {
     if (!(prompt in this.answers))
-      throw new Error('Unexpected prompt: ' + prompt)
-    return this.answers[prompt]
+      return ''
+
+    return this.answers[prompt].shift()
   }
 
   answer(prompt, response) {
-    this.answers[prompt] = response
+    this.answers[prompt] ||= []
+    this.answers[prompt].push(response)
   }
 }

@@ -37,3 +37,12 @@ export class FlatWin extends Win {
       : '0-F'
   }
 }
+
+export class Forfeit extends Win {
+
+  ptn() {
+    return this.color == 'white'
+      ? '1-0'
+      : '0-1'
+  }
+}

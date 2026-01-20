@@ -1,7 +1,7 @@
 import Board from './board.js'
 import { Stone } from './piece.js'
 import { Move, Place, PlaceFlat } from './play.js'
-import { Draw, FlatWin, RoadWin } from './result.js'
+import { Draw, FlatWin, Forfeit, RoadWin } from './result.js'
 
 export default class Game {
 
@@ -10,7 +10,15 @@ export default class Game {
     this.plays = []
   }
 
+  forfeit(color) {
+    this.forfeited = color == 'white' ? 'black' : 'white'
+  }
+
   result() {
+    if (this.forfeited) {
+      return new Forfeit(this.forfeited)
+    }
+
     if (this.board.filled()
       || this.board.white.empty() && this.board.black.empty()
     ) {

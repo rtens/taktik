@@ -11,38 +11,42 @@ test('white wins', async t => {
   const inter = new MockInterface(t)
   const runner = new Runner(inter)
 
-  runner.import = MockPlayer.playing_ptn([
+  runner.import = MockPlayer.playing([
     'b2', 'a1', 'a2', 'b3', 'a3'
   ]).import()
 
-  runner.run()
+  inter.answer("Player 1:", "foo One")
+  inter.answer("Player 2:", "foo Two")
+  inter.answer("Who is white? (1, 2, [r]andom)", "1")
+  inter.answer("Board size: (3-8 [5])", "3")
 
-  await inter.answer("Player 1:", "foo One")
-  await inter.answer("Player 2:", "foo Two")
-  await inter.answer("Who is white? (1, 2, [r]andom)", "1")
-  await inter.answer("Board size: (3-8 [5])", "3")
-  await inter.expect("One won by road")
-  await inter.expect("R-0")
+  await runner.run()
 
-  t.pass()
+  t.like(inter.outputs.slice(-2), [
+    "One won by road",
+    "R-0",
+  ])
 })
 
 test('black wins', async t => {
   const inter = new MockInterface(t)
   const runner = new Runner(inter)
 
-  runner.import = MockPlayer.playing_ptn([
+  runner.import = MockPlayer.playing([
     'a1', 'b1', 'b2', 'a2', 'c3', 'a3'
   ]).import()
-
-  runner.run()
 
   await inter.answer("Player 1:", "foo One")
   await inter.answer("Player 2:", "foo Two")
   await inter.answer("Who is white? (1, 2, [r]andom)", "1")
   await inter.answer("Board size: (3-8 [5])", "3")
-  await inter.expect("Two won by road")
-  await inter.expect("0-R")
+
+  await runner.run()
+
+  t.like(inter.outputs.slice(-2), [
+    "Two won by road",
+    "0-R",
+  ])
 
   t.pass()
 })

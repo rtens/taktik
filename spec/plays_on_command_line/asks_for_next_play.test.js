@@ -9,7 +9,6 @@ test('First play', async t => {
     interface: inter
   }, 'Foo')
 
-  inter.expect('Press enter to see the board')
   inter.answer('Your play:', 'a1')
   const play = await cli.play()
 
