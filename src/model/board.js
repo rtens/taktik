@@ -1,4 +1,5 @@
 import Coords from './coords.js'
+import { Move } from './play.js'
 import Square from './square.js'
 import Stash from './stash.js'
 
@@ -51,9 +52,8 @@ export default class Board {
     const checked = {}
 
     const neighbors = square =>
-      [[0, -1], [0, 1], [-1, 0], [1, 0]]
-        .map(([f, r]) =>
-          square.coords.moved(new Coords(f, r)).name())
+      Object.values(Move.directions)
+        .map(dir => square.coords.moved(dir).name())
         .filter(n => n in this.squares)
 
     const build_chain = (chain, square, color) => {

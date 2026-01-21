@@ -11,7 +11,7 @@ class Play {
     return new this(new Coords(file, rank))
   }
 
-  apply(_board) {
+  apply(_board, _color) {
     throw new Error('not implemented')
   }
 
