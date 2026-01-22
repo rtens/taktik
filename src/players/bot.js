@@ -38,6 +38,7 @@ export default class Bot extends Player {
       } else if (square.top().color == color) {
         for (const dir of Object.keys(Move.directions)) {
           const height = square.pieces.length
+
           const drops = [[height]]
 
           for (const dropped of drops) {

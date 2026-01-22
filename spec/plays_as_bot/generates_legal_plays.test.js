@@ -94,16 +94,24 @@ test.skip('lonely stack', t => {
   board.squares['b2'].stack(new Stack([
     new Stone('black'),
     new Stone('white'),
+    new Stone('black'),
   ]))
 
   const plays = new Bot()
     .legal_plays(board, 'white')
 
   t.deepEqual(plays
-    .filter(p => p instanceof Move)
-    .map(p => p.ptn()),
+              .filter(p => p instanceof Move)
+              .map(p => p.ptn())
+              .filter(p => p.contains('>')),
     [
-
+      'b2>',
+      '2b2>',
+      '2b2>11',
+      '3b2>',
+      '3b2>21',
+      '3b2>12',
+      '3b2>111'
     ])
 })
 
