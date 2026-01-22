@@ -5,17 +5,20 @@ import Player from '../player.js'
 
 export default class Bot extends Player {
 
+  constructor(runner) {
+    super(runner)
+    this.random = Math.random
+  }
+
   name() {
     return 'Bot'
   }
 
   play(game) {
-    if (game.plays.length <= 2) {
+    if (game.plays.length < 2) {
       const s = game.board.size - 1
       const corners = [
         new Coords(0, 0),
-        new Coords(0, s),
-        new Coords(s, 0),
         new Coords(s, s),
       ]
 
@@ -26,7 +29,7 @@ export default class Bot extends Player {
     }
 
     const plays = this.legal_plays(game.board, game.turn())
-    return plays[Math.floor(Math.random() * plays.length)]
+    return plays[Math.floor(this.random() * plays.length)]
   }
 
   legal_plays(board, color) {
