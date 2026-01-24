@@ -87,7 +87,7 @@ export default class Bot extends Player {
     const { white, black } = board.flat_count()
     evaluation += (white - black) * 10
 
-    if (board.full() || !board.white.count() || !board.black.count())
+    if (board.finished())
       return (white - black) * 1000
 
     return evaluation

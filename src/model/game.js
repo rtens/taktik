@@ -28,10 +28,7 @@ export default class Game {
       return new RoadWin('black')
     }
 
-    if (this.board.full()
-      || !this.board.white.count()
-      || !this.board.black.count()
-    ) {
+    if (this.board.finished()) {
       const { white, black } = this.board.flat_count()
 
       if (white > black) {

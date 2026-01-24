@@ -34,6 +34,13 @@ export default class Board {
     return !Object.values(this.squares).find(s => s.empty())
   }
 
+  finished() {
+    return this.full()
+      || !this.white.count()
+      || !this.black.count()
+
+  }
+
   clone() {
     const board = new Board(this.size)
     board.white = this.white.clone()
