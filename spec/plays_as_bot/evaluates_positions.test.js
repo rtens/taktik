@@ -1,6 +1,6 @@
 import test from 'ava'
 import Board from '../../src/model/board.js'
-import Bot from '../../src/players/simple.js'
+import Bot from '../../src/players/bot.js'
 import Stack from '../../src/model/stack.js'
 import { Stone } from '../../src/model/piece.js'
 
