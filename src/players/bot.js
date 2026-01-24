@@ -41,11 +41,13 @@ export default class Bot extends Player {
   }
 
   best_play(board, color) {
-    const debug = {}
+    const debug = {
+      searched: {},
+      evals: {},
+      chosen: {}
+    }
     this.debug.push(debug)
 
-    debug.evals ||= {}
-    debug.chosen ||= {}
     const start = new Date().getTime()
 
     let chosen = null
@@ -53,61 +55,63 @@ export default class Bot extends Player {
     try {
       for (let depth = 0; depth <= this.level; depth++) {
         debug.evals[depth] = []
+        debug.searched[depth] = {}
+        const searched = debug.searched[depth]
 
         let best = -Infinity
         let plays = []
         for (const play of this.legal_plays(board, color)) {
+          const applied = board.clone()
+          play.apply(applied, color)
 
-          const clone = board.clone()
-          play.apply(clone, color)
+          const score = color == 'white'
+            ? this.minimax(true, applied, best, start, searched, depth)
+            : -this.minimax(false, applied, best, start, searched, depth)
 
-          const side = color == 'white' ? 1 : -1
-          const deep_eval = side * this.deep_evaluate(clone, best, side * -1, depth, start, debug)
+          debug.evals[depth].push([play.ptn(), score])
 
-          debug.evals[depth].push([play.ptn(), deep_eval])
-
-          if (deep_eval == best) plays.push(play)
-          if (deep_eval <= best) continue
-
-          plays = [play]
-          best = deep_eval
+          if (score == best) plays.push(play)
+          if (score > best) {
+            plays = [play]
+            best = score
+          }
         }
-
-        // console.log(plays.map(p => p.ptn()))
 
         chosen = plays[Math.floor(this.random() * plays.length)]
         debug.chosen[depth] = chosen.ptn()
       }
-    } catch { }
+    } catch (e) {
+      if (e != 'TIME_OUT') throw e
+    }
 
     return chosen
   }
 
-  deep_evaluate(board, bestest, side, depth, start, debug) {
-    debug.searched ||= {}
-    debug.searched[depth] ||= 0
-    debug.searched[depth]++
+  minimax(min, board, sofar, start, searched, depth) {
+    searched[depth] ||= 0
+    searched[depth]++
 
     const evaluation = this.evaluate(board)
     if (!depth) return evaluation
 
     if (Math.abs(evaluation) > 900)
-      return evaluation + side * depth
+      return evaluation + depth
 
     const passed = new Date().getTime() - start
     if (passed > this.think_time_ms) throw 'TIME_OUT'
 
-    const color = side == 1 ? 'white' : 'black'
-    let best = -Infinity
+    const color = min ? 'black' : 'white'
+    let best = min ? Infinity : -Infinity
     for (const play of this.legal_plays(board, color)) {
-      const clone = board.clone()
-      play.apply(clone, color)
+      const applied = board.clone()
+      play.apply(applied, color)
 
-      const deep_eval = side * this.deep_evaluate(clone, bestest, side * -1, depth - 1, start, debug)
-      // console.log(depth, color, play.ptn(), deep_eval, bestest)
+      const score = this.minimax(!min, applied, sofar, start, searched, depth - 1)
 
-      if (this.pruning && deep_eval < bestest) return -deep_eval
-      if (deep_eval > best) best = deep_eval
+      if (this.pruning && score < sofar) return score
+
+      if (min && score < best) best = score
+      if (!min && score > best) best = score
     }
 
     return best

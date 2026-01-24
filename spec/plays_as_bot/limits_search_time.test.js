@@ -47,7 +47,7 @@ test('finishes road', t => {
   t.is(play.ptn(), 'c3')
 })
 
-test.only('prevents road', t => {
+test('prevents road', t => {
   const board = new Board(3)
   board.squares['a3'].stack(new Stack([new Stone('white')]))
   board.squares['c3'].stack(new Stack([new Stone('white')]))

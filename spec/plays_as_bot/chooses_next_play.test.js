@@ -72,16 +72,35 @@ test('does not prevent roads at level 0', t => {
   t.is(play.ptn(), 'a3')
 })
 
-test('prevents roads at level 1', t => {
-  const game = new Game(3)
-  game.perform(parse('a1'))
-  game.perform(parse('a2'))
-  game.perform(parse('b2'))
+test('prevent white road', t => {
+  const board = new Board(3)
+  board.squares['a1'].stack(new Stack([new Stone('white')]))
+  board.squares['b1'].stack(new Stack([new Stone('white')]))
 
   const bot = new Bot().at(1)
-  const play = bot.play(game)
+  bot.think_time_ms = 1000
+  bot.random = () => 0
 
-  t.is(play.ptn(), 'c2')
+  const play = bot.best_play(board, 'black')
+
+  t.is(play.ptn(), 'c1')
+})
+
+test('prevent black road', t => {
+  const board = new Board(3)
+  board.squares['a2'].stack(new Stack([
+    new Stone('black'),
+    new Stone('black'),
+    new Stone('black')
+  ]))
+
+  const bot = new Bot().at(1)
+  bot.think_time_ms = 1000
+  bot.random = () => 0
+
+  const play = bot.best_play(board, 'white')
+
+  t.is(play.ptn(), 'Sb2')
 })
 
 test('white prefers the sooner road', t => {
@@ -89,7 +108,7 @@ test('white prefers the sooner road', t => {
   board.squares['a3'].stack(new Stack([new Stone('white')]))
   board.squares['b3'].stack(new Stack([new Stone('white')]))
 
-  const bot = new Bot().at(1)
+  const bot = new Bot().at(2)
   bot.think_time_ms = 10000
   bot.random = () => 0
 
@@ -104,7 +123,7 @@ test('black prefers the sooner road', t => {
   board.squares['b3'].stack(new Stack([new Stone('white')]))
 
   const bot = new Bot().at(1)
-  bot.think_time_ms = 10000
+  bot.think_time_ms = 1000
   bot.random = () => 0
 
   const play = bot.best_play(board, 'white')
