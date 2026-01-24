@@ -90,7 +90,7 @@ test('white prefers the sooner road', t => {
   board.squares['b3'].stack(new Stack([new Stone('white')]))
 
   const bot = new Bot().at(1)
-  bot.max_time_ms = 10000
+  bot.think_time_ms = 10000
   bot.random = () => 0
 
   const play = bot.best_play(board, 'white')
@@ -104,7 +104,7 @@ test('black prefers the sooner road', t => {
   board.squares['b3'].stack(new Stack([new Stone('white')]))
 
   const bot = new Bot().at(1)
-  bot.max_time_ms = 10000
+  bot.think_time_ms = 10000
   bot.random = () => 0
 
   const play = bot.best_play(board, 'white')

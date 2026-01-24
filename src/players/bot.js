@@ -8,7 +8,7 @@ export default class Bot extends Player {
   constructor(runner, level) {
     super(runner)
     this.level = level ? parseInt(level) : 2
-    this.max_time_ms = 100
+    this.think_time_ms = (this.level + 1) * 100
     this.random = Math.random
     this.pruning = true
     this.debug = []
@@ -95,7 +95,7 @@ export default class Bot extends Player {
       return evaluation + side * depth
 
     const passed = new Date().getTime() - start
-    if (passed > this.max_time_ms) throw 'TIME_OUT'
+    if (passed > this.think_time_ms) throw 'TIME_OUT'
 
     const color = side == 1 ? 'white' : 'black'
     let best = -Infinity

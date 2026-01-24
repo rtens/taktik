@@ -8,7 +8,7 @@ test('limited time', t => {
   const board = new Board(3)
 
   const bot = new Bot().at(4)
-  bot.max_time_ms = 100
+  bot.think_time_ms = 100
   bot.random = () => 0
 
   const start = new Date().getTime()
@@ -39,7 +39,7 @@ test('finishes road', t => {
   ]))
 
   const bot = new Bot().at(4)
-  bot.max_time_ms = 100
+  bot.think_time_ms = 100
   bot.random = () => 0
 
   const play = bot.best_play(board, 'white')
@@ -53,7 +53,7 @@ test.only('prevents road', t => {
   board.squares['c3'].stack(new Stack([new Stone('white')]))
 
   const bot = new Bot().at(3)
-  bot.max_time_ms = 100
+  bot.think_time_ms = 100
   bot.random = () => 0
   const play = bot.best_play(board, 'black')
 

@@ -6,7 +6,7 @@ test('without pruning', t => {
   const board = new Board(3)
 
   const bot = new Bot().at(2)
-  bot.max_time_ms = 1000
+  bot.think_time_ms = 1000
   bot.random = () => 0
   bot.pruning = false
   bot.best_play(board, 'white')
@@ -24,7 +24,7 @@ test('with pruning', t => {
   const board = new Board(3)
 
   const bot = new Bot().at(3)
-  bot.max_time_ms = 1000
+  bot.think_time_ms = 1000
   bot.random = () => 0
   bot.best_play(board, 'white')
 
