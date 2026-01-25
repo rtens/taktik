@@ -65,8 +65,8 @@ export default class Bot extends Player {
           play.apply(applied, color)
 
           const score = color == 'white'
-                ? this.minimax(true, applied, best, Infinity,  start, searched, depth)
-                : -this.minimax(false, applied, -Infinity, -best, start, searched, depth)
+            ? this.minimax(true, applied, best, Infinity, start, searched, depth)
+            : -this.minimax(false, applied, -Infinity, -best, start, searched, depth)
 
           // console.log(depth, color, play.ptn(), score, best)
           debug.evals[depth].push([play.ptn(), score])
@@ -158,7 +158,7 @@ export default class Bot extends Player {
           const max = square.pieces.length
 
           for (let take = 1; take <= max; take++) {
-            const drops = this.spread([], take)
+            const drops = spread([], take)
 
             for (const dropped of drops) {
               const move = new Move(square.coords).to(dir)
@@ -177,16 +177,16 @@ export default class Bot extends Player {
     }
 
     return plays
-  }
 
-  spread(drops, last) {
-    if (!last) return [drops]
+    function spread(drops, last) {
+      if (!last) return [drops]
 
-    const spreads = []
-    for (let take = 0; take < last; take++) {
-      spreads.push(...this.spread([...drops, last - take], take))
+      const spreads = []
+      for (let take = 0; take < last; take++) {
+        spreads.push(...spread([...drops, last - take], take))
+      }
+
+      return spreads
     }
-
-    return spreads
   }
 }
