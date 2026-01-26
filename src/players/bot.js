@@ -6,10 +6,12 @@ import Player from '../player.js'
 
 export default class Bot extends Player {
 
-  constructor(runner, level) {
+  constructor(runner, level, think_time) {
     super(runner)
     this.level = level ? parseInt(level) : 2
-    this.think_time_ms = (this.level + 1) * 100
+    this.think_time_ms = think_time
+      ? parseInt(think_time)
+      : (this.level + 1) * 100
     this.random = Math.random
     this.pruning = true
     this.debug = []
