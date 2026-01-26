@@ -2,35 +2,44 @@ import test from 'ava'
 import Bot from '../../src/players/bot.js'
 import Board from '../../src/model/board.js'
 
-test('comparison', t => {
-  const board = new Board(3)
+test('without pruning', t => {
+  const bot = new MyBot(false, 2)
+  bot.best_play(new Board(3))
 
-  class MyBot extends Bot {
-    searched = {}
+  t.deepEqual(bot.searched, {
+    0: 18,
+    1: 336,
+    2: 5520,
+  })
+})
 
-    constructor(pruning) {
-      super(null, 2)
-      this.pruning = pruning
-    }
-    best_plays(board, depth) {
-      if (depth < 2) return []
-      return super.best_plays(board, depth)
-    }
+test('with pruning', t => {
+  const bot = new MyBot(true, 3)
+  bot.best_play(new Board(3))
 
-    search(board, depth, alpha, beta) {
-      this.searched[depth] ||= 0
-      this.searched[depth]++
-      return super.search(board, depth, alpha, beta)
-    }
+  t.deepEqual(bot.searched, {
+    0: 18,
+    1: 336,
+    2: 572,
+    3: 5984,
+  })
+})
+
+class MyBot extends Bot {
+  searched = {}
+
+  constructor(pruning, level) {
+    super(null, level)
+    this.pruning = pruning
+  }
+  best_plays(board, depth) {
+    if (depth < this.level) return []
+    return super.best_plays(board, depth)
   }
 
-  const not_pruning = new MyBot(false)
-  const pruning = new MyBot(true)
-
-  not_pruning.best_play(board)
-  pruning.best_play(board)
-
-  t.assert(pruning.searched[2] == not_pruning.searched[2])
-  t.assert(pruning.searched[1] <= not_pruning.searched[1])
-  t.assert(pruning.searched[0] < not_pruning.searched[0] / 5)
-})
+  search(board, depth, alpha, beta) {
+    this.searched[this.level - depth] ||= 0
+    this.searched[this.level - depth]++
+    return super.search(board, depth, alpha, beta)
+  }
+}

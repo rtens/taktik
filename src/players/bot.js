@@ -58,18 +58,24 @@ export default class Bot extends Player {
 
   best_plays(board, depth, timeout) {
     let plays = []
+
+    let best = -Infinity
     for (const play of this.legal_plays(board)) {
-      const score = -this.search(board.applied(play), depth, -10000, 10000, timeout)
-      // console.log(' ', board.turn, play.ptn(), score)
-      plays.push({ play, score })
+      const score = -this.search(
+        board.applied(play),
+        depth,
+        best,
+        Infinity,
+        timeout)
+
+      if (score == best) plays.push(play)
+      if (score > best) {
+        best = score
+        plays = [play]
+      }
     }
 
-    // console.log(plays.map(p => [p.play.ptn(), p.score]))
-
-    const max = Math.max(...plays.map(p => p.score))
     return plays
-      .filter(p => p.score == max)
-      .map(p => p.play)
   }
 
   search(board, depth, alpha, beta, timeout) {
@@ -85,8 +91,13 @@ export default class Bot extends Player {
     if (!depth) return this.evaluate(board)
 
     for (const play of this.legal_plays(board)) {
-      const score = -this.search(board.applied(play), depth - 1, -beta, -alpha, timeout)
-      // console.log(depth, board.turn, play.ptn(), score, alpha, beta)
+      const score = -this.search(
+        board.applied(play),
+        depth - 1,
+        -beta,
+        -alpha,
+        timeout)
+
       if (this.pruning && score >= beta) return beta
       if (score > alpha) alpha = score
     }
