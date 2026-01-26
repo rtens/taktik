@@ -29,4 +29,8 @@ export default class MockInterface {
   save(file, content) {
     this.saved.push({ file, content })
   }
+
+  colored(_color, output) {
+    return output
+  }
 }

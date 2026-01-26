@@ -16,7 +16,7 @@ export default class Interface {
   }
 
   async read(prompt) {
-    process.stdout.write(prompt + ' ')
+    process.stdout.write(this.colored('white', prompt) + ' ')
     if (this.args.length) {
       this.print(this.args[0])
       return this.args.shift()
@@ -34,4 +34,19 @@ export default class Interface {
 
     fs.writeFileSync(file, content)
   }
+
+  colored(color, output) {
+    return `\x1b[${colors[color]}m${output}\x1b[0m`
+  }
+}
+
+const colors = {
+  black: 30,
+  red: 31,
+  green: 32,
+  yellow: 33,
+  blue: 34,
+  magenta: 35,
+  cyan: 36,
+  white: 37,
 }

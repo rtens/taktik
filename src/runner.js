@@ -10,10 +10,11 @@ export default class Runner {
   }
 
   async run() {
-    this.interface.print("Let's play Tak")
+    this.interface.print(this.interface.colored('magenta', "Let's play Tak"))
 
     const players = await this.players()
     const game = await this.start_game(players)
+    this.interface.print('')
 
     while (!game.result()) {
       const player = players[game.board.turn]
@@ -26,7 +27,8 @@ export default class Runner {
         game.forfeited()
 
       } else {
-        this.interface.print(`${player.name()} plays ${play.ptn()}`)
+        const color = game.board.turn == 'white' ? 'yellow' : 'green'
+        this.interface.print(`${player.name()} plays ${this.interface.colored(color, play.ptn())}`)
 
         try {
           game.perform(play)
@@ -75,7 +77,7 @@ export default class Runner {
   }
 
   print_result(game, players) {
-    this.interface.print(game.board.print())
+    this.interface.print('\n' + game.board.print() + '\n')
 
     const result = game.result()
 
@@ -92,7 +94,8 @@ export default class Runner {
       this.interface.print(`${players[result.by].name()} forfeits`)
     }
 
-    this.interface.print(result.ptn())
+    this.interface.print(this.interface.colored('red', result.ptn()) + '\n')
+
     this.interface.save(
       'games/' + game.started.slice(0, 19).replace(/\D/g, '_'),
       game.ptn())
