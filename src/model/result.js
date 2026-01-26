@@ -40,6 +40,11 @@ export class FlatWin extends Win {
 
 export class Forfeit extends Win {
 
+  constructor(by) {
+    super(by == 'white' ? 'black' : 'white')
+    this.by = by
+  }
+
   ptn() {
     return this.color == 'white'
       ? '1-0'

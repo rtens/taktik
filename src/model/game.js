@@ -12,13 +12,13 @@ export default class Game {
     this.plays = []
   }
 
-  forfeit(color) {
-    this.forfeited = color == 'white' ? 'black' : 'white'
+  forfeited() {
+    this.forfeit = new Forfeit(this.board.turn)
   }
 
   result() {
-    if (this.forfeited)
-      return new Forfeit(this.forfeited)
+    if (this.forfeit)
+      return this.forfeit
 
     return this.board.game_over()
   }

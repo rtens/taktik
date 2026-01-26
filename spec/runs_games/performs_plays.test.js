@@ -140,7 +140,7 @@ test('white forfeits', async t => {
 
   t.true(inter.closed)
   t.like(inter.outputs.slice(-2), [
-    'Two forfeits',
+    'One forfeits',
     '0-1'
   ])
 })
@@ -158,7 +158,7 @@ test('black forfeits', async t => {
 
   t.true(inter.closed)
   t.like(inter.outputs.slice(-2), [
-    'One forfeits',
+    'Two forfeits',
     '1-0'
   ])
 })
