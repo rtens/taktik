@@ -31,7 +31,8 @@ export default function parse(ptn) {
 
 function direction(symbol) {
   if (symbol == '.') return '>'
-  if (symbol == ',') return '<'
+  if (symbol == ',') return '>'
+  if (symbol == '0') return '<'
   return symbol
 }
 
