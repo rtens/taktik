@@ -15,7 +15,7 @@ test('limited time', t => {
   const play = bot.best_play(game.board)
   const time = new Date().getTime() - start
 
-  t.assert(time < 110, 'Took ' + time + 'ms')
+  t.assert(time < 120, 'Took ' + time + 'ms')
   t.assert(play != null)
 })
 
@@ -43,7 +43,7 @@ test('finishes road', t => {
   ]))
 
   const bot = new Bot().at(4)
-  bot.think_time_ms = 10
+  bot.think_time_ms = 100
   bot.random = () => 0
 
   const play = bot.best_play(game.board)

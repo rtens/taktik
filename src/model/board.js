@@ -5,13 +5,22 @@ import Stash from './stash.js'
 import { Cap, Stone } from '../model/piece.js'
 import { Draw, FlatWin, RoadWin } from './result.js'
 
+const pieces = {
+  3: [10, 0],
+  4: [15, 0],
+  5: [21, 1],
+  6: [30, 1],
+  7: [40, 2],
+  8: [50, 2]
+}
+
 export default class Board {
 
   constructor(size) {
     this.size = size
     this.turn = 'white'
-    this.white = new Stash().starting('white', stones[size], caps[size])
-    this.black = new Stash().starting('black', stones[size], caps[size])
+    this.white = new Stash().starting('white', ...pieces[size])
+    this.black = new Stash().starting('black', ...pieces[size])
     this.squares = this.init_squares()
   }
 
@@ -201,24 +210,13 @@ export default class Board {
     lines.push('   ' + [...Array(this.size).keys()]
       .map(i => ' ' + String.fromCharCode(97 + i) + ' ').join(' '))
 
-    return lines.join('\n')
+    const output = lines.join('\n').split('\n')
+
+    output[1] += '   C: ' + this.white.caps.length
+    output[2] += '   S: ' + this.white.stones.length
+    output[4] += '   c: ' + this.black.caps.length
+    output[5] += '   s: ' + this.black.stones.length
+
+    return output.join('\n')
   }
-}
-
-const stones = {
-  3: 10,
-  4: 15,
-  5: 21,
-  6: 30,
-  7: 40,
-  8: 50
-}
-
-const caps = {
-  3: 0,
-  4: 0,
-  5: 1,
-  6: 1,
-  7: 2,
-  8: 2
 }

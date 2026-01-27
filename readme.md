@@ -21,7 +21,6 @@ Make all sizes fun and challenging but winnable.
 
 ### General stuff
 - starting plays in legal plays
-- print stashes
 
 ### Maybe later
 - show Player options with args
