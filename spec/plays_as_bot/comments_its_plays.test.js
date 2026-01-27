@@ -2,8 +2,6 @@ import test from 'ava'
 import Game from '../../src/model/game.js'
 import parse from '../../src/model/parse.js'
 import Bot from '../../src/players/bot.js'
-import Stack from '../../src/model/stack.js'
-import { Stone } from '../../src/model/piece.js'
 
 test('first play', t => {
   const game = new Game()
@@ -26,7 +24,8 @@ test('finish road', t => {
 
   const play = new Bot().play(game)
 
-  t.assert(play.comment.match(/score: 9002, depth: 2, candidates: c2, searched \d+ in \d+ms/))
+  t.assert(play.comment.match(/score: 9002, depth: 2, searched \d+ in \d+ms/),
+    play.comment)
 })
 
 test('level 0 does not see tak', t => {
@@ -36,7 +35,8 @@ test('level 0 does not see tak', t => {
   bot.level = 0
   const play = bot.play(game)
 
-  t.assert(play.comment.match(/score: 0, depth: 0, candidates: a3,b1,b3,c1,c2,c3, searched \d+ in \d+ms/), play.comment)
+  t.assert(play.comment.match(/score: 0, depth: 0, searched \d+ in \d+ms/),
+    play.comment)
 })
 
 test('timeout', t => {
@@ -47,7 +47,8 @@ test('timeout', t => {
   bot.think_time_ms = 10
   const play = bot.play(game)
 
-  t.assert(play.comment.match(/score: 0, timeout/))
+  t.assert(play.comment.match(/score: 0, depth: 2, timeout/),
+    play.comment)
 })
 
 function played(...plays) {

@@ -56,7 +56,6 @@ export default class Bot extends Player {
       for (let depth = 0; depth <= this.level; depth++) {
         const plays = this.best_plays(board, depth, sorted, timeout, info)
         chosen = plays[Math.floor(this.random() * plays.length)]
-        chosen.comment += `, depth: ${depth}, candidates: ${plays.map(p => p.ptn())}`
         sorted.sort((a, b) => {
           if (plays.indexOf(a) > -1) return -1
           if (plays.indexOf(b) > -1) return 1
@@ -85,7 +84,7 @@ export default class Bot extends Player {
         timeout,
         info)
 
-      play.comment = `score: ${score}`
+      play.comment = `score: ${score}, depth: ${depth}`
 
       if (score == best) plays.push(play)
       if (score > best) {
