@@ -3,7 +3,8 @@
   "scripts": {
     "start": "node main.js",
     "test": "ava",
-    "retest": "ava --watch"
+    "retest": "ava --watch",
+    "profile": "node --prof main.js bot 3,bot 3,r,4; node --prof-process isolate* > profile.txt; rm isolate*"
   },
   "devDependencies": {
     "ava": "^6.4.1"

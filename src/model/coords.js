@@ -3,6 +3,7 @@ export default class Coords {
   constructor(file, rank) {
     this.file = file
     this.rank = rank
+    this.name = String.fromCharCode(97 + file) + (rank + 1)
   }
 
   static from(name) {
@@ -16,9 +17,5 @@ export default class Coords {
     return new Coords(
       this.file + by.file,
       this.rank + by.rank)
-  }
-
-  name() {
-    return String.fromCharCode(97 + this.file) + (this.rank + 1)
   }
 }

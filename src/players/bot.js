@@ -11,7 +11,7 @@ export default class Bot extends Player {
     this.level = level ? parseInt(level) : 2
     this.think_time_ms = think_time
       ? parseInt(think_time)
-      : (this.level + 1) * 100
+      : Math.pow(2, this.level) * 200
     this.random = Math.random
     this.pruning = true
     this.debug = []
@@ -52,8 +52,9 @@ export default class Bot extends Player {
     const info = { searched: 0 }
 
     let chosen = null
+    let depth = 0
     try {
-      for (let depth = 0; depth <= this.level; depth++) {
+      for (; depth <= this.level; depth++) {
         const plays = this.best_plays(board, depth, sorted, timeout, info)
         chosen = plays[Math.floor(this.random() * plays.length)]
         sorted.sort((a, b) => {
@@ -64,10 +65,10 @@ export default class Bot extends Player {
       }
     } catch (e) {
       if (e != 'TIME') throw e
-      chosen.comment += ', timeout'
+      chosen.comment += ` timeout@${depth}`
     }
 
-    chosen.comment += `, searched ${info.searched} in ${(new Date().getTime() - start)}ms`
+    chosen.comment += ` ${Math.round(info.searched / (new Date().getTime() - start + 1) * 1000)}/s`
     return chosen
   }
 
@@ -84,7 +85,7 @@ export default class Bot extends Player {
         timeout,
         info)
 
-      play.comment = `score: ${score}, depth: ${depth}`
+      play.comment = `${score}@${depth}`
 
       if (score == best) plays.push(play)
       if (score > best) {
@@ -145,6 +146,9 @@ export default class Bot extends Player {
   }
 
   legal_plays(board) {
+    if (board.legal_plays_cache)
+      return board.legal_plays_cache
+
     if (board.game_over()) return []
 
     const plays = []
@@ -159,6 +163,7 @@ export default class Bot extends Player {
       }
     }
 
+    board.legal_plays_cache = plays
     return plays
 
     function place(square) {

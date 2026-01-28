@@ -22,6 +22,7 @@ export default class Board {
     this.white = new Stash().starting('white', ...pieces[size])
     this.black = new Stash().starting('black', ...pieces[size])
     this.squares = this.init_squares()
+    this.chain_cache = {}
   }
 
   next() {
@@ -36,15 +37,15 @@ export default class Board {
     for (let file = 0; file < this.size; file++) {
       for (let rank = 0; rank < this.size; rank++) {
         const coords = new Coords(file, rank)
-        squares[coords.name()] = new Square(coords)
+        squares[coords.name] = new Square(coords)
       }
     }
     return squares
   }
 
   square(coords) {
-    const square = this.squares[coords.name()]
-    if (!square) throw new Error(`Not a square: ${coords.name()}`)
+    const square = this.squares[coords.name]
+    if (!square) throw new Error(`Not a square: ${coords.name}`)
     return square
   }
 
@@ -112,32 +113,27 @@ export default class Board {
   chains(color) {
     const checked = {}
 
-    return Object.values(this.squares)
-      .map(square =>
-        this.build_chain(square, color, checked))
-      .filter(chain => chain.length)
+    if (!this.chain_cache[color])
+      this.chain_cache[color] = Object.values(this.squares)
+        .map(square => this.build_chain(square, color, checked))
+        .filter(chain => chain.length)
+
+    return this.chain_cache[color]
   }
 
   road(color) {
-    const checked = {}
-    for (const square of Object.values(this.squares)) {
-      const chain = this.build_chain(square, color, checked)
-      if (chain.length < this.size) continue
-
-      const files = chain.map(s => s.coords.file)
-      const ranks = chain.map(s => s.coords.rank)
-      if (Math.min(...files) == 0 && Math.max(...files) == this.size - 1
-        || Math.min(...ranks) == 0 && Math.max(...ranks) == this.size - 1
-      ) {
-        return chain
-      }
-    }
-
-    return null
+    return this.chains(color)
+      .filter(chain => chain.length >= this.size)
+      .find(chain => {
+        const files = chain.map(s => s.coords.file)
+        const ranks = chain.map(s => s.coords.rank)
+        return Math.min(...files) == 0 && Math.max(...files) == this.size - 1
+          || Math.min(...ranks) == 0 && Math.max(...ranks) == this.size - 1
+      })
   }
 
   build_chain(square, color, checked) {
-    const c = square.coords.name()
+    const c = square.coords.name
 
     if (c in checked)
       return []
@@ -151,7 +147,7 @@ export default class Board {
     const chain = [square]
 
     const neighbors = Object.values(Move.directions)
-      .map(dir => square.coords.moved(dir).name())
+      .map(dir => square.coords.moved(dir).name)
       .filter(n => n in this.squares)
 
     for (const n of neighbors) {

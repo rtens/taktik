@@ -105,7 +105,7 @@ export default class Move extends Play {
   }
 
   ptn() {
-    let ptn = this.coords.name() + this.symbol
+    let ptn = this.coords.name + this.symbol
 
     if (this.taken() > 1)
       ptn = this.taken() + ptn

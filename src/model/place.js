@@ -12,7 +12,7 @@ export default class Place extends Play {
   }
 
   ptn() {
-    return this.prefix() + this.coords.name()
+    return this.prefix() + this.coords.name
   }
 
   take_piece(_stash) {

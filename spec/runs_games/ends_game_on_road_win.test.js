@@ -93,6 +93,6 @@ test('white snake', t => {
       .stack(new Stack([new Stone('white')])))
 
   t.deepEqual(board.road('white')
-    .map(s => s.coords.name()),
+    .map(s => s.coords.name),
     road)
 })

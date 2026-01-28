@@ -13,6 +13,8 @@ Make all sizes fun and challenging but winnable.
   - influence
   - tak
 - speed up search
+  - play generation
+  - no cloning
 
 ### General stuff
 - starting plays in legal plays
