@@ -72,7 +72,8 @@ export default class Bot extends Player {
     }
 
     const time = new Date().getTime() - start
-    chosen.comment += ` ${time}ms ${Math.round(info.searched / (time + 1) * 1000)}/s`
+    const searches = Math.round(info.searched / (time + 1) * 1000)
+    chosen.comment += ` ${time}ms ${searches}/s`
     if (time > this.think_time_ms) chosen.comment += ' TIMEOUT'
     return chosen
   }
@@ -216,7 +217,7 @@ export default class Bot extends Player {
     }
 
     function move(square, cache) {
-      const height = square.pieces.length
+      const height = Math.min(board.size, square.pieces.length)
       if (!(height in cache)) {
         const droppings = []
         for (let take = 1; take <= height; take++) {
@@ -225,16 +226,23 @@ export default class Bot extends Player {
         cache[height] = droppings
       }
 
-      for (const dir of Object.keys(Move.directions)) {
-        for (const dropping of cache[height]) {
-          const move = new Move(square.coords)
-            .to(dir)
-            .dropping(dropping)
+      for (const dir in Move.directions) {
+        const d = Move.directions[dir]
 
-          try {
-            board.applied(move)
-            plays.push(move)
-          } catch { }
+        let max = 0
+        let target = square.coords.moved(d)
+        while (target.name in board.squares
+               && board.square(target).droppable()) {
+          max++
+          target = target.moved(d)
+        }
+
+        for (const dropping of cache[height]) {
+          if (dropping.length > max) continue
+
+          plays.push(new Move(square.coords)
+            .to(dir)
+            .dropping(dropping))
         }
       }
     }
