@@ -17,6 +17,7 @@ export default class Bot extends Player {
     this.debug = []
     this.evaluation_cache = {}
     this.legal_plays_cache = {}
+    this.drops_cache = {}
   }
 
   at(level) {
@@ -194,14 +195,10 @@ export default class Bot extends Player {
 
     const plays = []
     for (const square of Object.values(board.squares)) {
-      if (square.empty()) {
+      if (square.empty())
         place(square)
-
-      } else if (square.top().color == board.turn) {
-        for (const dir of Object.keys(Move.directions)) {
-          move(square, dir)
-        }
-      }
+      else if (square.top().color == board.turn)
+        move(square, this.drops_cache)
     }
 
     this.legal_plays_cache[key] = plays
@@ -218,13 +215,21 @@ export default class Bot extends Player {
           new Place.Cap(square.coords))
     }
 
-    function move(square, dir) {
-      const max = square.pieces.length
-      for (let take = 1; take <= max; take++) {
-        for (const dropped of spread([], take)) {
+    function move(square, cache) {
+      const height = square.pieces.length
+      if (!(height in cache)) {
+        const droppings = []
+        for (let take = 1; take <= height; take++) {
+          droppings.push(...spread([], take))
+        }
+        cache[height] = droppings
+      }
+
+      for (const dir of Object.keys(Move.directions)) {
+        for (const dropping of cache[height]) {
           const move = new Move(square.coords)
             .to(dir)
-            .dropping(dropped)
+            .dropping(dropping)
 
           try {
             board.applied(move)
