@@ -3,6 +3,7 @@ import Move from '../model/move.js'
 import Place from '../model/place.js'
 import { Win } from '../model/result.js'
 import Player from '../player.js'
+import { Stone, Cap } from '../model/piece.js'
 
 export default class Bot extends Player {
 
@@ -226,19 +227,34 @@ export default class Bot extends Player {
         cache[height] = droppings
       }
 
+      const droppable = coords => {
+        if (!(coords.name in board.squares)) return false
+        const s = board.square(coords)
+        const top = s.top()
+        if (top instanceof Cap) return false
+        if (!top || !top.standing) return true
+        return false
+      }
+
       for (const dir in Move.directions) {
         const d = Move.directions[dir]
 
         let max = 0
         let target = square.coords.moved(d)
-        while (target.name in board.squares
-               && board.square(target).droppable()) {
+        while (droppable(target)) {
           max++
           target = target.moved(d)
         }
 
         for (const dropping of cache[height]) {
-          if (dropping.length > max) continue
+          if (!(
+                dropping.length == max + 1
+                && square.top() instanceof Cap
+                && dropping.slice(-1)[0] == 1
+                && target.name in board.squares
+                && board.square(target).top().standing)
+              && dropping.length > max)
+            continue
 
           plays.push(new Move(square.coords)
             .to(dir)

@@ -17,12 +17,6 @@ export default class Square {
     return this.pieces.length == 0
   }
 
-  droppable() {
-    return this.empty()
-      || this.top() instanceof Stone
-      && !this.top().standing
-  }
-
   top() {
     if (this.empty()) return null
     return this.pieces.slice(-1)[0]

@@ -3,7 +3,7 @@ import Board from '../../src/model/board.js'
 import Bot from '../../src/players/bot.js'
 import Move from '../../src/model/move.js'
 import Stack from '../../src/model/stack.js'
-import { Stone } from '../../src/model/piece.js'
+import { Stone, Cap } from '../../src/model/piece.js'
 
 test('empty board', t => {
   const board = new Board(5)
@@ -158,6 +158,12 @@ test('walled off', t => {
   board.squares['c5'].stack(new Stack([
     new Stone('black').stand()
   ]))
+  board.squares['c2'].stack(new Stack([
+    new Stone('black').stand()
+  ]))
+  board.squares['b3'].stack(new Stack([
+    new Cap('black')
+  ]))
 
   const plays = new Bot()
     .legal_plays(board)
@@ -170,8 +176,7 @@ test('walled off', t => {
 
   t.deepEqual(plays
     .filter(p => p instanceof Move)
-    .map(p => p.ptn())
-    .filter(p => p.includes('+')),
+    .map(p => p.ptn()),
     [
       'c3+',
       '2c3+',
@@ -202,6 +207,36 @@ test('carry limit', t => {
       `3a1>21`,
       `3a1>12`
     ])
+})
+
+test('wall smash', t => {
+  const board = new Board(3)
+  board.squares['a1'].stack(new Stack([
+    new Stone('white'),
+    new Stone('white'),
+    new Cap('white'),
+  ]))
+  board.squares['c1'].stack(new Stack([
+    new Stone('black').stand()
+  ]))
+  board.squares['a2'].stack(new Stack([
+    new Stone('black').stand()
+  ]))
+
+  const plays = new Bot()
+    .legal_plays(board)
+
+  t.deepEqual(plays
+    .filter(p => p instanceof Move)
+    .map(p => p.ptn()),
+    [
+      'a1+',
+      `a1>`,
+      `2a1>`,
+      `2a1>11`,
+      `3a1>`,
+      `3a1>21`,
+    ], board.print())
 })
 
 test('full board', t => {
