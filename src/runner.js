@@ -7,6 +7,11 @@ export default class Runner {
     this.interface = inter
     this.import = file => import(file)
     this.random = Math.random
+
+    this.paint = {
+      white: s => inter.colored('yellow', s),
+      black: s => inter.colored('magenta', s)
+    }
   }
 
   async run() {
@@ -27,8 +32,7 @@ export default class Runner {
         game.forfeited()
 
       } else {
-        const color = game.board.turn == 'white' ? 'yellow' : 'green'
-        this.interface.print(`${player.name()} plays ${this.interface.colored(color, play.ptn())}`)
+        this.interface.print(`${player.name()} plays ${this.paint[game.board.turn](play.ptn())}`)
         if (play.comment) this.interface.print('-- ' + play.comment)
 
         try {
@@ -78,7 +82,7 @@ export default class Runner {
   }
 
   print_result(game, players) {
-    this.interface.print('\n' + game.board.print() + '\n')
+    this.interface.print('\n' + game.board.print(this.paint) + '\n')
 
     const result = game.result()
 

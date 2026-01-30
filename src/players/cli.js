@@ -14,8 +14,7 @@ export default class Cli extends Player {
     while (typeof input == 'string') {
       if (input) return parse(input)
 
-
-      this.runner.interface.print(game.board.print())
+      this.runner.interface.print(game.board.print(this.runner.paint))
       input = await this.runner.interface.read('Your play:')
     }
   }

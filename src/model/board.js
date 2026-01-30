@@ -190,7 +190,8 @@ export default class Board {
     return this.fingerprint_cache
   }
 
-  print() {
+  print(paint = null) {
+    paint ||= { white: s => s, black: s => s }
     const stacks = this.sort_stacks()
 
     const rows = []
@@ -200,7 +201,11 @@ export default class Board {
       for (let l = max - 1; l >= 0; l--) {
         const row = []
         for (const stack of stacks[r]) {
-          const p = stack[l] ? this.symbol(stack[l]) : ' '
+          const piece = stack[l]
+          const p = piece
+            ? paint[piece.color](this.symbol(piece))
+            : ' '
+
           row.push(' ' + p + ' ')
         }
         rows.push((r + 1) + ' |' + row.join('|') + '|')
@@ -219,10 +224,10 @@ export default class Board {
     ].join('\n').split('\n')
 
     const turn = c => this.turn == c ? ' > ' : '   '
-    output[1] += turn('white') + 'C: ' + this.white.caps.length
-    output[2] += turn('white') + 'S: ' + this.white.stones.length
-    output[4] += turn('black') + 'c: ' + this.black.caps.length
-    output[5] += turn('black') + 's: ' + this.black.stones.length
+    output[1] += paint.white(turn('white') + 'C: ' + this.white.caps.length)
+    output[2] += paint.white(turn('white') + 'S: ' + this.white.stones.length)
+    output[4] += paint.black(turn('black') + 'c: ' + this.black.caps.length)
+    output[5] += paint.black(turn('black') + 's: ' + this.black.stones.length)
 
     return output.join('\n')
   }
