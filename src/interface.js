@@ -3,6 +3,7 @@ import path from 'path'
 import readline from 'readline'
 
 export default class Interface {
+
   constructor(args) {
     this.args = args
     this.rl = readline.createInterface({

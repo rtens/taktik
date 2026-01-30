@@ -9,7 +9,7 @@ export default class Runner {
     this.random = Math.random
 
     this.paint = {
-      white: s => inter.colored('yellow', s),
+      white: s => inter.colored('green', s),
       black: s => inter.colored('magenta', s)
     }
   }
