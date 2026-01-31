@@ -163,7 +163,7 @@ test('black forfeits', async t => {
   ])
 })
 
-test('prints comments', async t => {
+test('hide comments', async t => {
   const inter = new MockInterface(t)
   const runner = new Runner(inter)
 
@@ -184,9 +184,8 @@ test('prints comments', async t => {
   t.like(inter.outputs.slice(2), [
     "One's turn (white)",
     "One plays a1",
-    "-- Comment by One",
     "Two's turn (black)",
     "Two plays b1",
-    "-- Comment by Two"
+    "One's turn (white)",
   ])
 })

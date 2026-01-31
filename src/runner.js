@@ -33,7 +33,6 @@ export default class Runner {
 
       } else {
         this.interface.print(`${player.name()} plays ${this.paint[game.board.turn](play.ptn())}`)
-        if (play.comment) this.interface.print('-- ' + play.comment)
 
         try {
           game.perform(play)
