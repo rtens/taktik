@@ -24,7 +24,7 @@ test('finish road', t => {
 
   const play = new Bot().play(game)
 
-  t.assert(play.comment.match(/9002@2 \d+ms \d+\/s/),
+  t.assert(play.comment.match(/9250@2 \d+ms \d+\/s/),
     play.comment)
 })
 

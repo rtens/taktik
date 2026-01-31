@@ -155,6 +155,16 @@ test('black prefers tak', t => {
   ], game.board.print())
 })
 
+test('play on if lost', t => {
+  const game = played(3, 'a2', 'a3', 'c3', 'a2>', 'c1')
+
+  const plays = new Bot().best_plays(game.board, 1)
+
+  t.deepEqual(plays.map(p => p.ptn()), [
+    'a2', 'b1', 'b3', 'c2'  
+  ], game.board.print())
+})
+
 function played(size, ...plays) {
   const game = new Game(size)
   plays.forEach(p => game.perform(parse(p)))

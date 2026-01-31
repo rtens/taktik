@@ -80,7 +80,7 @@ test('tak is better', t => {
   stack(board, 'a3', new Stone('white'))
 
   board.turn = 'black'
-  t.is(new Bot().evaluate(board), -320, board.turn)
+  t.is(new Bot().evaluate(board), -1020, board.turn)
 
   board.turn = 'white'
   t.is(new Bot().evaluate(board), 20, board.turn)

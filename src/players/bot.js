@@ -141,10 +141,10 @@ export default class Bot extends Player {
 
     if (!depth)
       return evaluation
-    if (evaluation == GAME_OVER)
-      return evaluation + depth
-    if (evaluation == -GAME_OVER)
-      return evaluation - depth
+    if (evaluation >= GAME_OVER)
+      return evaluation + depth * 100
+    if (evaluation <= -GAME_OVER)
+      return evaluation - depth * 100
 
     if (timeout && new Date().getTime() > timeout)
       return TIMEOUT
@@ -179,15 +179,12 @@ export default class Bot extends Player {
     if (key in this.evaluation_cache)
       return this.evaluation_cache[key]
 
+    let over = 0
     const game_over = board.game_over()
-    if (game_over instanceof Win) {
-      const evaluation = game_over.color == board.turn
+    if (game_over instanceof Win) 
+      over = game_over.color == 'white'
         ? GAME_OVER
         : -GAME_OVER
-
-      this.evaluation_cache[key] = evaluation
-      return this.evaluation_cache[key]
-    }
 
     const stash_diff = board.black.count()
       - board.white.count()
@@ -202,13 +199,14 @@ export default class Bot extends Player {
       + stash_diff * 10
       + flat_diff * 10
       + chain_diff * 10
+      + over
 
     let relative = board.turn == 'white'
       ? evaluation
       : -evaluation
 
-    if (this.tak(board))
-      relative -= 300
+    if (!over && this.tak(board))
+      relative -= 1000
 
     this.evaluation_cache[key] = relative
     return relative
