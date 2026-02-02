@@ -181,7 +181,7 @@ export default class Bot extends Player {
 
     let over = 0
     const game_over = board.game_over()
-    if (game_over instanceof Win) 
+    if (game_over instanceof Win)
       over = game_over.color == 'white'
         ? GAME_OVER
         : -GAME_OVER
@@ -197,7 +197,7 @@ export default class Bot extends Player {
 
     const evaluation = 0
       + stash_diff * 10
-      + flat_diff * 10
+      + flat_diff * 50
       + chain_diff * 10
       + over
 
@@ -206,7 +206,7 @@ export default class Bot extends Player {
       : -evaluation
 
     if (!over && this.tak(board))
-      relative -= 1000
+      relative -= 100
 
     this.evaluation_cache[key] = relative
     return relative

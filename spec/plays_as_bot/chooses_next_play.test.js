@@ -161,7 +161,7 @@ test('play on if lost', t => {
   const plays = new Bot().best_plays(game.board, 1)
 
   t.deepEqual(plays.map(p => p.ptn()), [
-    'a2', 'b1', 'b3', 'c2'  
+    'a2', 'b1', 'b3', 'c2'
   ], game.board.print())
 })
 

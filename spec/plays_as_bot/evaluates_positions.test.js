@@ -16,9 +16,9 @@ test('more flats more better', t => {
   const board = new Board(5)
   stack(board, 'a1', new Stone('white'))
 
-  t.is(new Bot().evaluate(board), 10)
+  t.is(new Bot().evaluate(board), 50)
   board.turn = 'black'
-  t.is(new Bot().evaluate(board), -10)
+  t.is(new Bot().evaluate(board), -50)
 })
 
 test('negative flats diff', t => {
@@ -29,9 +29,9 @@ test('negative flats diff', t => {
   stack(board, 'c3', new Stone('black'))
   stack(board, 'd4', new Stone('black'))
 
-  t.is(new Bot().evaluate(board), -20)
+  t.is(new Bot().evaluate(board), -100)
   board.turn = 'black'
-  t.is(new Bot().evaluate(board), 20)
+  t.is(new Bot().evaluate(board), 100)
 })
 
 test('less stash more better', t => {
@@ -66,9 +66,9 @@ test('the longer chains the better', t => {
   stack(board, 'c2', new Stone('white'))
   stack(board, 'e5', new Stone('white'))
 
-  t.is(new Bot().evaluate(board), 90)
+  t.is(new Bot().evaluate(board), 290)
   board.turn = 'black'
-  t.is(new Bot().evaluate(board), -90)
+  t.is(new Bot().evaluate(board), -290)
 })
 
 test('tak is better', t => {
@@ -79,11 +79,9 @@ test('tak is better', t => {
   stack(board, 'a1', new Stone('white'))
   stack(board, 'a3', new Stone('white'))
 
+  t.is(new Bot().evaluate(board), 100, board.turn)
   board.turn = 'black'
-  t.is(new Bot().evaluate(board), -1020, board.turn)
-
-  board.turn = 'white'
-  t.is(new Bot().evaluate(board), 20, board.turn)
+  t.is(new Bot().evaluate(board), -200, board.turn)
 })
 
 function stack(board, fr, ...pieces) {
