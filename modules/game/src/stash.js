@@ -42,4 +42,14 @@ export default class Stash {
       throw new Error('No caps left')
     return Stack.of(this.caps.pop())
   }
+
+  put(stack) {
+    for (const piece of stack.pieces) {
+      if (piece instanceof Stone) {
+        this.stones.push(piece.flat())
+      } else {
+        this.caps.push(piece)
+      }
+    }
+  }
 }

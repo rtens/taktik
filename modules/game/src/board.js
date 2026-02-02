@@ -33,6 +33,11 @@ export default class Board {
     this.next()
   }
 
+  revert(play) {
+    this.next()
+    play.revert(this)
+  }
+
   next() {
     if (this.turn == 'white')
       this.turn = 'black'

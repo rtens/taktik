@@ -69,29 +69,29 @@ export default class Move extends Play {
 
       this.validate_drop(square, dropped)
 
-      // if (square.top() && square.top().standing)
-      //   this.smashed = true
+      if (square.top() && square.top().standing)
+        this.smashed = true
 
       square.stack(dropped)
     }
   }
 
-  // revert(board) {
-  //   const stack = new Stack()
+  revert(board) {
+    const stack = new Stack()
 
-  //   let coords = this.coords
-  //   for (const drop of this.drops) {
-  //     coords = coords.moved(this.direction)
+    let coords = this.coords
+    for (const drop of this.drops) {
+      coords = coords.moved(this.direction)
 
-  //     const square = board.square(coords)
-  //     stack.add(square.take(drop))
-  //   }
+      const square = board.square(coords)
+      stack.add(square.take(drop))
+    }
 
-  //   if (this.smashed)
-  //     board.square(coords).top().stand()
+    if (this.smashed)
+      board.square(coords).top().stand()
 
-  //   board.square(this.coords).stack(stack)
-  // }
+    board.square(this.coords).stack(stack)
+  }
 
   validate_move(board, square) {
     if (!this.direction)

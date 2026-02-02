@@ -10,10 +10,10 @@ export default class Place extends Play {
     square.stack(this.take_piece(board[board.turn]))
   }
 
-  // revert(board) {
-  //   const stack = board.square(this.coords).take(1)
-  //   board[board.turn].put(stack)
-  // }
+  revert(board) {
+    const stack = board.square(this.coords).take(1)
+    board[board.turn].put(stack)
+  }
 
   // ptn() {
   //   return this.prefix() + this.coords.name

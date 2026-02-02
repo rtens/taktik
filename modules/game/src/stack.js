@@ -12,7 +12,7 @@ export default class Stack {
     return new Stack(this.pieces.splice(0, number))
   }
 
-  // add(stack) {
-  //   this.pieces.push(...stack.pieces)
-  // }
+  add(stack) {
+    this.pieces.push(...stack.pieces)
+  }
 }

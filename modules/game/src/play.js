@@ -20,9 +20,9 @@ export default class Play {
     throw new Error('not implemented')
   }
 
-  // revert(_board) {
-  //   throw new Error('not implemented')
-  // }
+  revert(_board) {
+    throw new Error('not implemented')
+  }
 
   // ptn() {
   //   throw new Error('not implemented')
