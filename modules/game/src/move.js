@@ -6,10 +6,10 @@ import Stack from './stack.js'
 export default class Move extends Play {
 
   static directions = {
-    '+': new Coords(0, 1),
-    '-': new Coords(0, -1),
-    '>': new Coords(1, 0),
-    '<': new Coords(-1, 0)
+    up: new Coords(0, 1),
+    down: new Coords(0, -1),
+    right: new Coords(1, 0),
+    left: new Coords(-1, 0)
   }
 
   constructor(coords) {
@@ -19,26 +19,25 @@ export default class Move extends Play {
     this.drops = []
   }
 
-  to(symbol) {
-    this.symbol = symbol
-    this.direction = Move.directions[symbol]
+  to(direction) {
+    this.direction = direction
     return this
   }
 
   up() {
-    return this.to('+')
+    return this.to(Move.directions.up)
   }
 
   down() {
-    return this.to('-')
+    return this.to(Move.directions.down)
   }
 
   right() {
-    return this.to('>')
+    return this.to(Move.directions.right)
   }
 
   left() {
-    return this.to('<')
+    return this.to(Move.directions.left)
   }
 
   dropping(drops) {

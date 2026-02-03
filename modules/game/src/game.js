@@ -1,5 +1,6 @@
 import Board from './board.js'
 import Place from './place.js'
+import { Forfeit } from './result.js'
 
 export default class Game {
 
@@ -14,5 +15,16 @@ export default class Game {
 
     this.board.apply(play)
     this.plays.push(play)
+  }
+
+  forfeit() {
+    this.forfeited = new Forfeit(this.board.turn)
+  }
+
+  result() {
+    if (this.forfeited)
+      return this.forfeited
+
+    return this.board.game_over()
   }
 }

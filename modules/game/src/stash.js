@@ -25,6 +25,10 @@ export default class Stash {
       new Cap(color))
   }
 
+  count() {
+    return this.stones.length + this.caps.length
+  }
+
   take_flat() {
     if (!this.stones.length)
       throw new Error('No stones left')

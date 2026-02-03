@@ -1,155 +1,107 @@
 import test from 'ava'
-import Game from '../src/game.js'
 import Place from '../src/place.js'
 import Move from '../src/move.js'
 import { Cap, Stone } from '../src/piece.js'
-import Stack from '../src/stack.js'
+import { board, setup_game } from './fixture.js'
 
 test('place flat', t => {
-  const game = start()
+  const game = setup_game()
 
-  const play = Place.Flat.at(1, 1)
+  const play = Place.Flat.at(0, 2)
   game.board.apply(play)
   game.board.revert(play)
 
   t.is(game.board.turn, 'white')
-  t.is(game.board.white.stones.length, 9)
-  t.like(game.board.squares, {
-    b2: { pieces: [undefined] }
-  })
+  t.is(game.board.white.stones.length, 10)
+  t.like(game.board, board(3, [
+    ['']
+  ]))
 })
 
 test('place wall', t => {
-  const game = start()
+  const game = setup_game()
 
-  const play = Place.Wall.at(1, 1)
+  const play = Place.Wall.at(0, 2)
   game.board.apply(play)
   game.board.revert(play)
 
-  t.is(game.board.white.stones.length, 9)
-  t.like(game.board.squares, {
-    b2: { pieces: [undefined] }
-  })
+  t.is(game.board.white.stones.length, 10)
   t.like(game.board.white.stones.slice(-1), [
     new Stone('white')
   ])
+  t.like(game.board, board(3, [
+    ['']
+  ]))
 })
 
 test('place cap', t => {
-  const game = start(5)
+  const game = setup_game(5)
 
-  const play = Place.Cap.at(1, 1)
+  const play = Place.Cap.at(0, 2)
   game.board.apply(play)
   game.board.revert(play)
 
-  t.like(game.board.squares, {
-    b2: { pieces: [undefined] }
-  })
   t.like(game.board.white.caps, [
     new Cap('white')
   ])
+  t.like(game.board, board(3, [
+    ['']
+  ]))
 })
 
 test('move one', t => {
-  const game = start()
-  game.board.squares['a2'].stack(Stack.of(
-    new Stone('white').stand()
-  ))
+  const game = setup_game(3, [
+    ['fS']
+  ])
 
-  const play = Move.at(0, 1).right().drop(1)
+  const play = Move.at(0, 2).right().drop(1)
   game.board.apply(play)
   game.board.revert(play)
 
-  t.like(game.board.squares, {
-    a2: { pieces: [new Stone('white').stand()] },
-    b2: { pieces: [undefined] },
-  })
+  t.like(game.board, board(3, [
+    ['fS']
+  ]))
 })
 
 test('spread stack', t => {
-  const game = start()
-  game.board.squares['a2'].stack(Stack.of(
-    new Stone('black'),
-    new Stone('white'),
-    new Stone('black'),
-    new Stone('white').stand(),
-  ))
+  const game = setup_game(3, [
+    ['fFfS']
+  ])
 
-  const play = Move.at(0, 1).right().drop(1).drop(2)
+  const play = Move.at(0, 2).right().drop(1).drop(2)
   game.board.apply(play)
   game.board.revert(play)
 
-  t.like(game.board.squares, {
-    a2: {
-      pieces: [
-        new Stone('black'),
-        new Stone('white'),
-        new Stone('black'),
-        new Stone('white').stand()
-      ]
-    },
-    b2: { pieces: [undefined] },
-    c2: { pieces: [undefined] },
-  })
+  t.like(game.board, board(3, [
+    ['fFfS']
+  ]))
 })
 
 test('smash wall', t => {
-  const game = start()
-  game.board.squares['a2'].stack(Stack.of(
-    new Cap('white')
-  ))
-  game.board.squares['b2'].stack(Stack.of(
-    new Stone('black'),
-    new Stone('white').stand(),
-  ))
+  const game = setup_game(3, [
+    ['C', 'fS']
+  ])
 
-  const play = Move.at(0, 1).right().drop(1)
+  const play = Move.at(0, 2).right().drop(1)
   game.board.apply(play)
   game.board.revert(play)
 
-  t.like(game.board.squares, {
-    a2: {
-      pieces: [
-        new Cap('white')
-      ]
-    },
-    b2: {
-      pieces: [
-        new Stone('black'),
-        new Stone('white').stand(),
-      ]
-    },
-  })
+  t.like(game.board, board(3, [
+    ['C', 'fS']
+  ]))
 })
 
 test('no smash', t => {
-  const game = start()
-  game.board.squares['a2'].stack(Stack.of(
-    new Cap('white')
-  ))
-  game.board.squares['b2'].stack(Stack.of(
-    new Stone('black'),
-    new Stone('white'),
-  ))
+  const game = setup_game(3, [
+    ['C', 'fF']
+  ])
 
-  const play = Move.at(0, 1).right().drop(1)
+  const play = Move.at(0, 2).right().drop(1)
   game.board.apply(play)
   game.board.revert(play)
 
-  t.like(game.board.squares, {
-    b2: {
-      pieces: [
-        new Stone('black'),
-        new Stone('white'),
-      ]
-    },
-  })
+  t.like(game.board, board(3, [
+    ['C', 'fF']
+  ]))
 })
-
-function start(size = 3) {
-  const game = new Game(size)
-  game.perform(Place.Flat.at(0, 0))
-  game.perform(Place.Flat.at(0, 2))
-  return game
-}
 

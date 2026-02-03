@@ -1,6 +1,7 @@
 import test from 'ava'
 import Game from '../src/game.js'
 import Place from '../src/place.js'
+import { setup_game } from './fixture.js'
 
 test('not a square', t => {
   const game = new Game(3)
@@ -51,9 +52,7 @@ test('out of flats', t => {
 })
 
 test('out of walls', t => {
-  const game = new Game(3)
-  game.perform(Place.Flat.at(2, 1))
-  game.perform(Place.Flat.at(2, 2))
+  const game = setup_game()
   game.board.white.stones = []
 
   const error = t.throws(() =>
@@ -63,9 +62,7 @@ test('out of walls', t => {
 })
 
 test('out of caps', t => {
-  const game = new Game(3)
-  game.perform(Place.Flat.at(2, 1))
-  game.perform(Place.Flat.at(2, 2))
+  const game = setup_game()
 
   const error = t.throws(() =>
     game.perform(Place.Cap.at(0, 0)))
