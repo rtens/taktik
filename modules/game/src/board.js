@@ -60,9 +60,6 @@ export default class Board {
   }
 
   game_over() {
-    // if (this.game_over_cache !== undefined)
-    //   return this.game_over_cache
-
     const other = this.turn == 'white'
       ? 'black' : 'white'
 
@@ -86,7 +83,6 @@ export default class Board {
       }
     }
 
-    // this.game_over_cache = over
     return over
   }
 
@@ -125,13 +121,9 @@ export default class Board {
   chains(color) {
     const checked = {}
 
-    // if (!this.chain_cache[color])
-    // this.chain_cache[color] = 
     return this.squares_list
       .map(square => this.build_chain(square, color, checked))
       .filter(chain => chain.length)
-
-    // return this.chain_cache[color]
   }
 
   build_chain(square, color, checked) {

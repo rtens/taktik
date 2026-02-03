@@ -15,17 +15,9 @@ export default class Place extends Play {
     board[board.turn].put(stack)
   }
 
-  // ptn() {
-  //   return this.prefix() + this.coords.name
-  // }
-
   take_piece(_stash) {
     throw new Error('not implemented')
   }
-
-  // prefix() {
-  //   throw new Error('not implemented')
-  // }
 }
 
 Place.Flat = class extends Place {
@@ -33,10 +25,6 @@ Place.Flat = class extends Place {
   take_piece(stash) {
     return stash.take_flat()
   }
-
-  // prefix() {
-  //   return ''
-  // }
 }
 
 Place.Wall = class extends Place {
@@ -44,10 +32,6 @@ Place.Wall = class extends Place {
   take_piece(stash) {
     return stash.take_wall()
   }
-
-  // prefix() {
-  //   return 'S'
-  // }
 }
 
 Place.Cap = class extends Place {
@@ -55,8 +39,4 @@ Place.Cap = class extends Place {
   take_piece(stash) {
     return stash.take_cap()
   }
-
-  // prefix() {
-  //   return 'C'
-  // }
 }

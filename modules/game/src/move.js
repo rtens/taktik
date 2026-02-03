@@ -122,16 +122,4 @@ export default class Move extends Play {
     )
       throw new Error('Drop on wall')
   }
-
-  // ptn() {
-  //   let ptn = this.coords.name + this.symbol
-
-  //   if (this.taken() > 1)
-  //     ptn = this.taken() + ptn
-
-  //   if (this.drops.length > 1)
-  //     ptn += this.drops.join('')
-
-  //   return ptn
-  // }
 }

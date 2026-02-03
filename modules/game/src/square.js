@@ -1,5 +1,4 @@
 import Coords from './coords.js'
-// import { Stone } from './piece.js'
 import Stack from './stack.js'
 
 export default class Square {
@@ -37,10 +36,4 @@ export default class Square {
 
     return new Stack(this.pieces.splice(-number, number))
   }
-
-  // clone() {
-  //   const square = new Square(this.coords)
-  //   square.pieces = this.pieces.map(p => p.clone())
-  //   return square
-  // }
 }
