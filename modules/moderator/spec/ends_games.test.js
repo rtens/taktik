@@ -195,7 +195,7 @@ test('save ptn', async t => {
   await mod.start()
 
   t.is(user.saved.length, 1)
-  t.assert(user.saved[0].file.match(/^games\/\d{4}(_\d{2}){5}$/))
+  t.assert(user.saved[0].file.match(/^games\/\d{4}(_\d{2}){5}.ptn$/))
   t.deepEqual(user.saved[0].content.split('\n').slice(-9), [
     '[Player1 "one"]',
     '[Player2 "two"]',

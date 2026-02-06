@@ -77,7 +77,7 @@ export default class Moderator {
     const result = game.result()
     this.user.tell(this.user.paint('red', result.ptn()))
 
-    const file = 'games/' + game.started.slice(0, 19).replace(/\D/g, '_')
-    this.user.save(file, game.ptn())
+    const timestamp = game.started.slice(0, 19).replace(/\D/g, '_')
+    this.user.save(`games/${timestamp}.ptn`, game.ptn())
   }
 }

@@ -5,8 +5,19 @@ import { Cap } from '../../../game/src/piece.js'
 
 export default class Bot extends Player {
 
+  constructor(mod) {
+    super(mod)
+    this.random = Math.random
+  }
+
   name() {
     return 'Bot'
+  }
+
+  async play(game) {
+    const legals = this.legals(game.board)
+    const random = Math.floor(this.random() * legals.length)
+    return legals[random]
   }
 
   legals(board) {
