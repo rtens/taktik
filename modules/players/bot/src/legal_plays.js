@@ -2,6 +2,8 @@ import Place from '../../../game/src/place.js'
 import Move from '../../../game/src/move.js'
 import { Cap } from '../../../game/src/piece.js'
 
+const drops_cache = {}
+
 export default class LegalPlays {
 
   constructor(board) {
@@ -35,10 +37,14 @@ export default class LegalPlays {
 
   move(square, plays) {
     const height = Math.min(this.board.size, square.pieces.length)
-    const droppings = []
-    for (let take = 1; take <= height; take++) {
-      droppings.push(...this.spread([], take))
+    if (!(height in drops_cache)) {
+      const droppings = []
+      for (let take = 1; take <= height; take++) {
+        droppings.push(...this.spread([], take))
+      }
+      drops_cache[height] = droppings
     }
+    const droppings = drops_cache[height]
 
     for (const dir in Move.directions) {
       const d = Move.directions[dir]

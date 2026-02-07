@@ -4,7 +4,8 @@ import Coords from '../../../game/src/coords.js'
 import LegalPlays from './legal_plays.js'
 import { Win } from '../../../game/src/result.js'
 
-const GAME_OVER = 9000
+const GAME_OVER = 900
+const INFINITY = 9999
 
 export default class Bot extends Player {
 
@@ -12,6 +13,12 @@ export default class Bot extends Player {
     super(mod)
     this.random = Math.random
     this.level = level ? parseInt(level) : 2
+    this.reset_cache()
+  }
+
+  reset_cache() {
+    this.evaluation_cache = {}
+    this.legal_plays_cache = {}
   }
 
   name() {
@@ -26,7 +33,12 @@ export default class Bot extends Player {
   }
 
   legals(board) {
-    return new LegalPlays(board).generate()
+    const key = board.fingerprint()
+    if (key in this.legal_plays_cache)
+      return this.legal_plays_cache[key]
+
+    this.legal_plays_cache[key] = new LegalPlays(board).generate()
+    return this.legal_plays_cache[key]
   }
 
   opening(board) {
@@ -42,18 +54,19 @@ export default class Bot extends Player {
   }
 
   best(board) {
+    this.reset_cache()
+
     const plays = this.best_plays(board, this.level)
     return plays[Math.floor(this.random() * plays.length)]
   }
 
   best_plays(board, depth) {
     let plays = []
-    let best = -Infinity
+    let best = -INFINITY
 
     for (const play of this.legals(board)) {
-
       board.apply(play)
-      const score = -this.search(board, depth)
+      const score = -this.search(board, depth, best, INFINITY)
       board.revert(play)
 
       if (score == best) {
@@ -68,31 +81,32 @@ export default class Bot extends Player {
     return plays
   }
 
-  search(board, depth) {
+  search(board, depth, alpha, beta) {
     const game_over = board.game_over()
     if (game_over instanceof Win)
       return game_over.color == board.turn
         ? GAME_OVER
         : -GAME_OVER
 
-    if (!depth)
-      return this.evaluate(board)
+    if (!depth) return this.evaluate(board)
 
-    let best = -Infinity
     for (const play of this.legals(board)) {
-
       board.apply(play)
-      const score = -this.search(board, depth - 1)
+      const score = -this.search(board, depth - 1, -beta, -alpha)
       board.revert(play)
 
-      if (score > best)
-        best = score
+      if (score >= beta) return beta
+      if (score > alpha) alpha = score
     }
 
-    return best
+    return alpha
   }
 
   evaluate(board) {
+    const key = board.fingerprint()
+    if (key in this.evaluation_cache)
+      return this.evaluation_cache[key]
+
     const { white, black } = board.flat_count()
     const flat_diff = white - black
 
@@ -103,9 +117,10 @@ export default class Bot extends Player {
       + flat_diff * 10
       + chain_diff * 10
 
-    return board.turn == 'white'
+    this.evaluation_cache[key] = board.turn == 'white'
       ? evaluation
       : -evaluation
+    return this.evaluation_cache[key]
   }
 
   chains(board, color) {

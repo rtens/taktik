@@ -2,7 +2,7 @@ import Stash from './stash.js'
 import Square from './square.js'
 import Move from './move.js'
 import { Draw, FlatWin, RoadWin } from './result.js'
-import { Stone } from './piece.js'
+import { Cap, Stone } from './piece.js'
 
 export default class Board {
 
@@ -13,6 +13,7 @@ export default class Board {
     this.black = new Stash('black', size)
     this.init_squares()
     this.init_neighbors()
+    this.clear_cache()
   }
 
   init_squares() {
@@ -36,6 +37,11 @@ export default class Board {
         .filter(n => n in this.squares)
   }
 
+  clear_cache() {
+    this.chain_cache = {}
+    this.fingerprint_cache = null
+  }
+
   square(coords) {
     const square = this.squares[coords.name]
     if (!square) throw new Error(`Not a square: ${coords.name}`)
@@ -53,6 +59,8 @@ export default class Board {
   }
 
   next() {
+    this.clear_cache()
+
     if (this.turn == 'white')
       this.turn = 'black'
     else
@@ -119,11 +127,15 @@ export default class Board {
   }
 
   chains(color) {
+    if (color in this.chain_cache)
+      return this.chain_cache[color]
+
     const checked = {}
 
-    return this.squares_list
+    this.chain_cache[color] = this.squares_list
       .map(square => this.build_chain(square, color, checked))
       .filter(chain => chain.length)
+    return this.chain_cache[color]
   }
 
   build_chain(square, color, checked) {
@@ -143,5 +155,25 @@ export default class Board {
       chain.push(...this.build_chain(this.squares[n], color, checked))
 
     return chain
+  }
+
+  fingerprint() {
+    if (this.fingerprint_cache)
+      return this.fingerprint_cache
+
+    this.fingerprint_cache = this.turn + this.squares_list
+      .map(s => s.pieces
+        .map(p => this.symbol(p)).join(''))
+      .join('|')
+    return this.fingerprint_cache
+  }
+
+  symbol(piece) {
+    const symbol = piece instanceof Cap ? 'c'
+      : (piece.standing ? 's' : 'f')
+
+    return piece.color == 'white'
+      ? symbol.toUpperCase()
+      : symbol
   }
 }

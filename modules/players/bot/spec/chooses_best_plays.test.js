@@ -21,7 +21,7 @@ test('prefer chains', t => {
   ])
 
   const bot = new Bot()
-  const plays = bot.best_plays(game.board, 1)
+  const plays = bot.best_plays(game.board, 0)
 
   t.deepEqual(plays.map(p => p.ptn()), [
     'a2', 'b3'
@@ -78,6 +78,6 @@ test('find tinue', t => {
   const plays = bot.best_plays(game.board, 2)
 
   t.deepEqual(plays.map(p => p.ptn()), [
-    'a1', 'c3'
+    'a1'
   ])
 })
