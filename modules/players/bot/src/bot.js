@@ -125,7 +125,7 @@ export default class Bot extends Player {
 
   chains(board, color) {
     return board.chains(color)
-      .filter(c => c.length > 1)
+      .filter(c => c.length >= board.size / 2)
       .reduce((sum, c) => sum + c.length, 0)
   }
 }

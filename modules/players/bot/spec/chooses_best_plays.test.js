@@ -16,7 +16,7 @@ test('prefer flats', t => {
 })
 
 test('prefer chains', t => {
-  const game = setup_game(3, [
+  const game = setup_game(4, [
     ['F']
   ])
 
@@ -24,7 +24,31 @@ test('prefer chains', t => {
   const plays = bot.best_plays(game.board, 0)
 
   t.deepEqual(plays.map(p => p.ptn()), [
-    'a2', 'b3'
+    'a3', 'b4'
+  ])
+})
+
+test('less than half board', t => {
+  const game = setup_game(5, [
+    ['F']
+  ])
+
+  const bot = new Bot()
+  const plays = bot.best_plays(game.board, 0)
+
+  t.is(plays.length, 24)
+})
+
+test('more than half board', t => {
+  const game = setup_game(5, [
+    ['F', 'F']
+  ])
+
+  const bot = new Bot()
+  const plays = bot.best_plays(game.board, 0)
+
+  t.deepEqual(plays.map(p => p.ptn()), [
+    'a4', 'b4', 'c5'
   ])
 })
 
