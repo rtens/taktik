@@ -21,7 +21,7 @@ export default class Moderator {
       const player = players[game.board.turn]
       this.user.tell(`${player.name()}'s turn as ${game.board.turn}`)
 
-      const play = await player.play(game)
+      const play = await player.play(game.clone())
 
       if (!play) {
         this.user.tell(`${player.name()} forfeits`)

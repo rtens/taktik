@@ -176,4 +176,15 @@ export default class Board {
       ? symbol.toUpperCase()
       : symbol
   }
+
+  clone() {
+    const clone = new Board(this.size)
+    clone.turn = this.turn
+    clone.white = this.white.clone()
+    clone.black = this.black.clone()
+    clone.squares = Object.entries(this.squares)
+      .reduce((a, [k, v]) => ({...a, [k]: v.clone()}), {})
+    clone.squares_list = Object.values(clone.squares)
+    return clone
+  }
 }

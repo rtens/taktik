@@ -31,6 +31,16 @@ export default class Game {
     return this.board.game_over()
   }
 
+  clone() {
+    const clone = new Game(this.board.size)
+    clone.board = this.board.clone()
+    clone.white = this.white
+    clone.black = this.black
+    clone.plays = [...this.plays]
+    clone.started = this.started
+    return clone
+  }
+
   ptn() {
     const turns = []
     for (let p = 0; p < this.plays.length; p += 2) {

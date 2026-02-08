@@ -56,4 +56,11 @@ export default class Stash {
       }
     }
   }
+
+  clone() {
+    const clone = new Stash('', 3)
+    clone.stones = [...this.stones.map(s => s.clone())]
+    clone.caps = [...this.caps.map(c => c.clone())]
+    return clone
+  }
 }

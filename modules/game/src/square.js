@@ -36,4 +36,10 @@ export default class Square {
 
     return new Stack(this.pieces.splice(-number, number))
   }
+
+  clone() {
+    const clone = new Square(this.coords)
+    clone.pieces = [...this.pieces.map(p => p.clone())]
+    return clone
+  }
 }
