@@ -4,6 +4,7 @@ import Coords from '../../../game/src/coords.js'
 import LegalPlays from './legal_plays.js'
 import { Win } from '../../../game/src/result.js'
 
+const TIMEOUT = 'TIME'
 const GAME_OVER = 900
 const INFINITY = 9999
 
@@ -13,6 +14,7 @@ export default class Bot extends Player {
     super(mod)
     this.random = Math.random
     this.level = level ? parseInt(level) : 2
+    this.time = 800 * Math.exp(2, this.level)
     this.reset_cache()
   }
 
@@ -55,18 +57,28 @@ export default class Bot extends Player {
 
   best(board) {
     this.reset_cache()
+    const timeout = new Date().getTime() + this.time
 
-    const plays = this.best_plays(board, this.level)
-    return plays[Math.floor(this.random() * plays.length)]
+    let chosen = null
+    for (let depth = 0; depth <= this.level; depth++) {
+      try {
+        const plays = this.best_plays(board, depth, timeout)
+        chosen = plays[Math.floor(this.random() * plays.length)]
+      } catch (e) {
+        if (e != TIMEOUT) throw e
+      }
+    }
+
+    return chosen
   }
 
-  best_plays(board, depth) {
+  best_plays(board, depth, timeout) {
     let plays = []
     let best = -INFINITY
 
     for (const play of this.legals(board)) {
       board.apply(play)
-      const score = -this.search(board, depth, best, INFINITY)
+      const score = -this.search(board, depth, best, INFINITY, timeout)
       board.revert(play)
 
       if (score == best) {
@@ -81,7 +93,10 @@ export default class Bot extends Player {
     return plays
   }
 
-  search(board, depth, alpha, beta) {
+  search(board, depth, alpha, beta, timeout) {
+    if (timeout && timeout < new Date().getTime())
+      throw TIMEOUT
+
     const game_over = board.game_over()
     if (game_over instanceof Win)
       return game_over.color == board.turn
