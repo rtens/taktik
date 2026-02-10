@@ -6,13 +6,13 @@ import Game from '../../../game/src/game.js'
 test('timeout', async t => {
   const bot = new Bot()
   bot.level = 3
-  bot.time = 100
+  bot.time = 50
 
   const start = new Date().getTime()
   await bot.best(new Game(5).board)
   const time = new Date().getTime() - start
 
-  t.assert(time < 120, 'took ' + time)
+  t.assert(time < 70, 'took ' + time)
 })
 
 test('prevent road', async t => {
