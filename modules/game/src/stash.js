@@ -13,14 +13,10 @@ const pieces = {
 export default class Stash {
 
   constructor(color, size) {
-    const opponent = color == 'white' ? 'black' : 'white'
     const [stones, caps] = pieces[size]
 
-    this.stones = [
-      ...[...new Array(stones - 1)].map(() =>
-        new Stone(color)),
-      new Stone(opponent),
-    ]
+    this.stones = [...new Array(stones)].map(() =>
+      new Stone(color))
     this.caps = [...new Array(caps)].map(() =>
       new Cap(color))
   }
@@ -33,6 +29,11 @@ export default class Stash {
     if (!this.stones.length)
       throw new Error('No stones left')
     return Stack.of(this.stones.pop())
+  }
+
+  take_stack(size) {
+    return Stack.of(...[...new Array(size)]
+      .map(() => this.stones.pop()))
   }
 
   take_wall() {

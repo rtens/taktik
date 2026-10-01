@@ -8,6 +8,7 @@ test('places', t => {
   t.is(Place.Flat.at(0, 0).ptn(), 'a1')
   t.is(Place.Wall.at(1, 2).ptn(), 'Sb3')
   t.is(Place.Cap.at(4, 3).ptn(), 'Ce4')
+  t.is(Place.Stack.at(2, 2).ptn(), '2c3')
 })
 
 test('moves', t => {

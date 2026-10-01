@@ -42,6 +42,12 @@ export default class Board {
     this.fingerprint_cache = null
   }
 
+  switch_stashes() {
+    const black = this.black
+    this.black = this.white
+    this.white = black
+  }
+
   square(coords) {
     const square = this.squares[coords.name]
     if (!square) throw new Error(`Not a square: ${coords.name}`)
@@ -181,7 +187,7 @@ export default class Board {
     clone.white = this.white.clone()
     clone.black = this.black.clone()
     clone.squares = Object.entries(this.squares)
-      .reduce((a, [k, v]) => ({...a, [k]: v.clone()}), {})
+      .reduce((a, [k, v]) => ({ ...a, [k]: v.clone() }), {})
     clone.squares_list = Object.values(clone.squares)
     return clone
   }

@@ -8,7 +8,8 @@ test('first', async t => {
   const bot = new Bot()
 
   const play = await bot.play(game)
-  t.deepEqual(play, Place.Flat.at(0, 0))
+  t.is(play.constructor, Place.Stack)
+  t.deepEqual(play, Place.Stack.at(0, 0))
 })
 
 test('response to a1', async t => {

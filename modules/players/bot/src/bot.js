@@ -24,12 +24,12 @@ export default class Bot extends Player {
   }
 
   name() {
-    return 'Bot' + this.level
+    return 'Bot@' + this.level
   }
 
   async play(game) {
     if (game.plays.length < 2)
-      return this.opening(game.board)
+      return this.opening(game.board, !game.plays.length)
 
     return this.best(game.board)
   }
@@ -43,7 +43,7 @@ export default class Bot extends Player {
     return this.legal_plays_cache[key]
   }
 
-  opening(board) {
+  opening(board, first) {
     const s = board.size - 1
     const corners = [
       new Coords(0, 0),
@@ -52,7 +52,9 @@ export default class Bot extends Player {
 
     const empty_corner = corners.find(c => board.square(c).empty())
 
-    return new Place.Flat(empty_corner)
+    return first
+      ? new Place.Stack(empty_corner)
+      : new Place.Flat(empty_corner)
   }
 
   best(board) {

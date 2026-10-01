@@ -9,18 +9,6 @@ test('white starts', t => {
   t.is(game.board.turn, 'white')
 })
 
-test('first stone in stash is other color', t => {
-  const game = new Game(3)
-
-  t.deepEqual(game.board.white.stones.slice(-3).map(p => p.color), [
-    'white', 'white', 'black'
-  ])
-
-  t.deepEqual(game.board.black.stones.slice(-3).map(p => p.color), [
-    'black', 'black', 'white'
-  ])
-})
-
 test('stashes sizes', t => {
   assert_stash(3, 10, 0)
   assert_stash(4, 15, 0)

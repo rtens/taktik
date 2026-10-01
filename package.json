@@ -4,7 +4,8 @@
     "start": "node main.js",
     "test": "ava",
     "retest": "ava --watch",
-    "profile": "node --prof main.js bot,bot,r,4; node --prof-process isolate* > profile.txt; rm isolate*"
+    "profile": "node --prof main.js bot,bot,r,4; node --prof-process isolate* > profile.txt; rm isolate*",
+    "play": "node main.js cli Me, bot 3, r, 5"
   },
   "devDependencies": {
     "ava": "^6.4.1"

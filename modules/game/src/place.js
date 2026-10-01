@@ -56,3 +56,14 @@ Place.Cap = class extends Place {
     return 'C'
   }
 }
+
+Place.Stack = class extends Place.Flat {
+
+  take_piece(stash) {
+    return stash.take_stack(2)
+  }
+
+  prefix() {
+    return '2'
+  }
+}

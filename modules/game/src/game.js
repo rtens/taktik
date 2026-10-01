@@ -13,11 +13,28 @@ export default class Game {
   }
 
   perform(play) {
-    if (this.plays.length < 2 && !(play instanceof Place.Flat))
+    if (this.plays.length && play instanceof Place.Stack)
+      throw new Error('Only allowed as first play')
+
+    if (this.plays.length < 2) {
+      this.perform_starting(play)
+    } else {
+      this.board.apply(play)
+    }
+
+    this.plays.push(play)
+  }
+
+  perform_starting(play) {
+    if (!(play instanceof Place.Flat))
       throw new Error('Must place flat')
 
-    this.board.apply(play)
-    this.plays.push(play)
+    try {
+      this.board.switch_stashes()
+      this.board.apply(play)
+    } finally {
+      this.board.switch_stashes()
+    }
   }
 
   forfeit() {

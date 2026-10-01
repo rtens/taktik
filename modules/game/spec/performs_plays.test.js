@@ -30,7 +30,7 @@ test('records plays', t => {
   ])
 })
 
-test('starting plays', t => {
+test('starting play flat', t => {
   const game = new Game(3)
 
   game.perform(Place.Flat.at(0, 2))
@@ -39,6 +39,17 @@ test('starting plays', t => {
   t.is(game.board.white.stones.length, 9)
   t.is(game.board.black.stones.length, 9)
   t.like(game.board, board(3, [['f', 'F']]))
+})
+
+test('starting play stack', t => {
+  const game = new Game(3)
+
+  game.perform(Place.Stack.at(0, 2))
+  game.perform(Place.Flat.at(1, 2))
+
+  t.is(game.board.white.stones.length, 9)
+  t.is(game.board.black.stones.length, 8)
+  t.like(game.board, board(3, [['ff', 'F']]))
 })
 
 test('place flat', t => {

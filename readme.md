@@ -8,8 +8,7 @@ Make all sizes fun and challenging but winnable.
 
 # Rules of Tak
 
-- The *board* is a euqal-sided  grid of 3x3 up to 8x8 *squares*.
-
+- The *board* is a square grid of 3x3 up to 8x8 *squares*.
 
 - Two *players* take turns playing different colored *pieces*.
 
@@ -17,7 +16,7 @@ Make all sizes fun and challenging but winnable.
 
 - The *number* of stones and capstones in each stash for different board sizes is 3:10/0, 4:15/0, 5:21/1, 6:30/1, 7:40/2, 8:50/2
 
-- The first player whose pieces form an orthogonally connected *road* between opposite sides of the board wins.
+- A player wins by showing that their pieces form an orthogonally connected *road* between opposite sides of the board.
 
 - On your turn, you can either *place* or *move*.
 
@@ -41,6 +40,8 @@ Make all sizes fun and challenging but winnable.
 
 - If no road is formed by the time either a stash or empty squares run out, the player with the higher *flat count*, meaning flats on top of stacks, wins.
 
-- If a player forms a road for themself and their opponent at the same time, they still win.
+- If both players have formed a road, the player who just completed their turn wins.
 
-- As the first play, the starting player places a flat of the opponents color, and vice versa.
+- As the first play, the starting player places a stack of two flats of the opponents color.
+
+- As the second play, the next player places a single flat of the opponents color.

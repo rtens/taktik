@@ -31,6 +31,7 @@ test('forfeit', async t => {
 
 test('parse ptn', async t => {
   await parse(t, 'a1', Place.Flat.at(0, 0))
+  await parse(t, '2a1', Place.Stack.at(0, 0))
   await parse(t, 'c4', Place.Flat.at(2, 3))
   await parse(t, 'Sb2', Place.Wall.at(1, 1))
   await parse(t, 'Ce1', Place.Cap.at(4, 0))
@@ -46,6 +47,7 @@ test('parse ptn', async t => {
 
 test('parse numpad', async t => {
   await parse(t, '11', Place.Flat.at(0, 0))
+  await parse(t, '211', Place.Flat.at(0, 0))
   await parse(t, '34', Place.Flat.at(2, 3))
   await parse(t, '/22', Place.Wall.at(1, 1))
   await parse(t, '*51', Place.Cap.at(4, 0))

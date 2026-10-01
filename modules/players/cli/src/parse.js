@@ -13,6 +13,9 @@ export default function parse(ptn) {
   } else if (ptn.startsWith('C') || ptn.startsWith('*')) {
     return new Place.Cap(parse_coords(ptn.slice(1)))
 
+  } else if (ptn.length == 3 && !direction(ptn.slice(2))) {
+    return new Place.Stack(parse_coords(ptn.slice(1)))
+
   } else if (ptn.length == 3) {
     return new Move(parse_coords(ptn.slice(0, 2)))
       .to(direction(ptn.slice(2)))
